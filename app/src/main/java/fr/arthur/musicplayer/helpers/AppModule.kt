@@ -1,21 +1,35 @@
 package fr.arthur.musicplayer.helpers
 
+import androidx.room.Room
+import fr.arthur.musicplayer.helpers.AppConstants.DB_NAME
 import fr.arthur.musicplayer.repositories.IMusicRepository
 import fr.arthur.musicplayer.repositories.MusicRepository
+import fr.arthur.musicplayer.room.AppDatabase
 import fr.arthur.musicplayer.usecase.GetAllArtistsUseCase
 import fr.arthur.musicplayer.usecase.GetAllMusicsUseCase
 import fr.arthur.musicplayer.usecase.GetAllPlaylistUseCase
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val appModule = module {
-    // single<IMusicRepository> { FakeMusicRepository() }
+
+    single {
+        Room.databaseBuilder<AppDatabase>(
+            androidContext(),
+            DB_NAME
+        ).build()
+    }
+
+    single { get<AppDatabase>().musicDao() }
+
     single { FolderUriStore(get()) }
     single { MusicScanner(get(), get()) }
+
+    single { MusicRepository(get(), get()) } // MusicScanner, TrackDao
     single<IMusicRepository> { get<MusicRepository>() }
-    single { MusicRepository(get()) }
 
     factory { GetAllMusicsUseCase(get()) }
     factory { GetAllArtistsUseCase(get()) }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+//    alias(libs.plugins.kotlin.kapt)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -45,7 +47,15 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.glide)
+//    implementation(libs.androidx.room.common.jvm)
+//    implementation(libs.androidx.room.runtime)
+//    implementation(libs.androidx.room.compiler)
+//    implementation(libs.org.jetbrains.kotlin.kapt.gradle.plugin)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+
 }

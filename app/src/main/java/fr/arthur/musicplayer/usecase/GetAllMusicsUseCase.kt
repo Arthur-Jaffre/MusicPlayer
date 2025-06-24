@@ -5,10 +5,15 @@ import fr.arthur.musicplayer.repositories.MusicRepository
 
 class GetAllMusicsUseCase(private val repository: MusicRepository) {
 
-    fun executeAsync(
+    suspend fun loadCachedMusics(): List<Music> {
+        return repository.loadCachedMusics()
+    }
+
+    suspend fun scanAndSaveMusics(
         onMusicFound: (Music) -> Unit,
         onComplete: () -> Unit
     ) {
-        repository.scanAudioFiles(onMusicFound, onComplete)
+        repository.scanAndSaveMusics(onMusicFound, onComplete)
     }
 }
+

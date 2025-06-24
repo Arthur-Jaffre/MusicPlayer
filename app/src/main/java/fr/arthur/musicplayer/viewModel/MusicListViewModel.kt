@@ -22,17 +22,42 @@ class MusicListViewModel(
         musicsObservable.post(emptyList())
 
         scope.launch {
-            getAllMusicsUseCase.executeAsync(
-                onMusicFound = { music ->
-                    musics.add(music)
-                    musicsObservable.post(musics.toList().sortedBy { it.title })
-                },
-                onComplete = {
-                    // Optionnel : notifier fin du chargement
-                }
-            )
+            val cached = getAllMusicsUseCase.loadCachedMusics()
+
+            if (cached.isEmpty()) {
+                // Base vide → lancer un scan complet puis sauvegarder dans Room
+                getAllMusicsUseCase.scanAndSaveMusics(
+                    onMusicFound = { /* on ne met rien à jour ici */ },
+                    onComplete = {
+                        // Après scan, recharger la base Room
+                        scope.launch {
+                            val updated = getAllMusicsUseCase.loadCachedMusics()
+                            musics.addAll(updated)
+                            musicsObservable.post(musics.sortedBy { it.title })
+                        }
+                    }
+                )
+            } else {
+                // Base non vide → afficher directement
+                musics.addAll(cached)
+                musicsObservable.post(musics.sortedBy { it.title })
+
+                // Puis lancer un scan asynchrone en fond pour mise à jour intelligente
+                getAllMusicsUseCase.scanAndSaveMusics(
+                    onMusicFound = { /* rien */ },
+                    onComplete = {
+                        scope.launch {
+                            musics.clear()
+                            val updated = getAllMusicsUseCase.loadCachedMusics()
+                            musics.addAll(updated)
+                            musicsObservable.post(musics.sortedBy { it.title })
+                        }
+                    }
+                )
+            }
         }
     }
+
 
     fun onCleared() {
         job.cancel()

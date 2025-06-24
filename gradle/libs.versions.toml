@@ -12,6 +12,10 @@ constraintlayout = "2.2.1"
 koinAndroid = "4.1.0"
 media3Exoplayer = "1.8.0-alpha01"
 glide = "5.0.0-rc01"
+roomCommonJvm = "2.7.2"
+roomRuntime = "2.7.2"
+roomCompiler = "2.7.2"
+orgJetbrainsKotlinKaptGradlePlugin = "2.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,8 +29,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
 androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3Exoplayer" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
