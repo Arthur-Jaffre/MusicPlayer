@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="menu_search">Rechercher</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="play_icon">Lire la musique</string>
+    <string name="playlist_icon">Voir la playlist</string>
+    <string name="options_icon_music">Options de la musique</string>
+    <string name="options_icon_playlist">Options de la playlist</string>
+    <string name="default_title">Titre de la musique</string>
+    <string name="default_artist">Artiste</string>
+    <string name="music_title">Titre de la musique</string>
+    <string name="playlist_title">Titre de la playlist</string>
+    <string name="playlist_number_of_musics">0 musique</string>
+    <string name="music_artist">Artiste</string>
+    <string name="menu_artists">Artistes</string>
+    <string name="menu_musics">Musiques</string>
+    <string name="menu_playlists">Playlists</string>
+    <string name="description_artist_cart">image artist</string>
+    <string name="musics_number">" musiques"</string>
+    <string name="favoris_playlist">Favoris</string>
+    <string name="recently_added_playlist">Ajoutées récemment</string>
+    <string name="select_folder">Choisir un dossier</string>
+    <string name="select_folder_desc">Sélectionnez le dossier où vos musiques sont stockées.\n\nVous ne pourrez écouter que les fichiers contenus dans ce dossier.</string>
+</resources>
