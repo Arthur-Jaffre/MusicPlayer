@@ -3,15 +3,26 @@ package fr.arthur.musicplayer.helpers
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import androidx.documentfile.provider.DocumentFile
+import fr.arthur.musicplayer.helpers.AppConstants.UNKNOWN_ITEM
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class MusicScanner(private val context: Context, private val folderUriStore: FolderUriStore) {
+
+    suspend fun scanAudioFilesSuspend(onMusicFound: (Music) -> Unit) =
+        suspendCoroutine<Unit> { cont ->
+            this.scanAudioFiles(
+                onMusicFound = onMusicFound,
+                onComplete = { cont.resume(Unit) }
+            )
+        }
 
     fun scanAudioFiles(onMusicFound: (Music) -> Unit, onComplete: () -> Unit) {
         val folderUri = folderUriStore.get() ?: run {
@@ -44,10 +55,10 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                     context.contentResolver.openFileDescriptor(file.uri, "r")?.use {
                         mmr.setDataSource(it.fileDescriptor)
                         val title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-                            ?: file.name ?: "Inconnu"
+                            ?: file.name ?: UNKNOWN_ITEM
                         val artistName =
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-                                ?: "Inconnu"
+                                ?: UNKNOWN_ITEM
                         val durationMs =
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                                 ?.toIntOrNull() ?: 0
