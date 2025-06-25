@@ -1,9 +1,8 @@
 package fr.arthur.musicplayer.usecase
 
 import fr.arthur.musicplayer.models.Playlist
-import fr.arthur.musicplayer.repositories.IMusicRepository
-import fr.arthur.musicplayer.repositories.MusicRepository
+import fr.arthur.musicplayer.repositories.interfaces.IPlaylistRepository
 
-class GetAllPlaylistUseCase(private val repository: MusicRepository) {
+class GetAllPlaylistUseCase(private val repository: IPlaylistRepository) {
     suspend fun execute(): List<Playlist> = repository.getAllPlayLists()
 }
