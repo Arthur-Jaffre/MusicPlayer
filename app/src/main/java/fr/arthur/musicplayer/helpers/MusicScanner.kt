@@ -24,7 +24,8 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
             )
         }
 
-    fun scanAudioFiles(onMusicFound: (Music) -> Unit, onComplete: () -> Unit) {
+
+    private fun scanAudioFiles(onMusicFound: (Music) -> Unit, onComplete: () -> Unit) {
         val folderUri = folderUriStore.get() ?: run {
             onComplete()
             return
@@ -54,26 +55,37 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                 try {
                     context.contentResolver.openFileDescriptor(file.uri, "r")?.use {
                         mmr.setDataSource(it.fileDescriptor)
+
                         val title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
                             ?: file.name ?: UNKNOWN_ITEM
-                        val artistName =
-                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-                                ?: UNKNOWN_ITEM
-                        val durationMs =
-                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                                ?.toIntOrNull() ?: 0
+
+                        val durationMs = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                            ?.toIntOrNull() ?: 0
                         val duration = durationMs / 1000
-                        val artist = Artist("0", artistName)
+
+                        val year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR)
+                            ?.takeIf { it.length >= 4 }  // on prend que l'année
+                            ?.substring(0, 4)
+                            ?.toIntOrNull()
+
+                        val trackNumber = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER)
+                            ?.toIntOrNull()
+
                         val music = Music(
                             id = file.uri.toString(),
                             title = title,
-                            artist = artist,
-                            duration = duration
+                            duration = duration,
+                            year = year,
+                            trackNumber = trackNumber,
+                            artistId = "",
+                            albumId = "",
                         )
+
                         withContext(Dispatchers.Main) {
                             onMusicFound(music)
                         }
                     }
+
                 } catch (_: Exception) {
                 }
                 mmr.release()

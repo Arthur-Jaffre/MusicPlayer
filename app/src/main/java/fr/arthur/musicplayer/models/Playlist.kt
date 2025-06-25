@@ -2,6 +2,6 @@ package fr.arthur.musicplayer.models
 
 data class Playlist(
     val id: String,
-    val name: String,
-    val numberOfMusics: Int,
+    val name: String? = null,
+    val numberOfMusics: Int = 0
 )

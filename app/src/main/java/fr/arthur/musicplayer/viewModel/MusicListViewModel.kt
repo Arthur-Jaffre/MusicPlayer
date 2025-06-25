@@ -10,12 +10,9 @@ import kotlinx.coroutines.launch
 
 class MusicListViewModel(
     private val getAllMusicsUseCase: GetAllMusicsUseCase
-) {
+) : BaseListViewModel() {
     val musicsObservable = SimpleObservable<List<Music>>()
     private val musics = mutableListOf<Music>()
-
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     fun loadMusics() {
         musics.clear()

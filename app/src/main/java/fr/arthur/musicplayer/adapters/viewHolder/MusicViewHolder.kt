@@ -23,8 +23,8 @@ class MusicViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun bind(music: Music) {
-        title.text = truncate(music.title)
-        artist.text = truncate(music.artist.name)
+        title.text = truncate(music.title.toString())
+        artist.text = truncate(music.artistId)
 
         playIcon.setOnClickListener {
             // TODO: Implémenter lecture plus tard

@@ -13,7 +13,6 @@ class GetAllMusicsUseCase(private val repository: MusicRepository) {
         onMusicFound: (Music) -> Unit,
         onComplete: () -> Unit
     ) {
-        repository.scanAndSaveMusics(onMusicFound, onComplete)
+        repository.scanAndSaveEverything(onMusicFound, onComplete)
     }
 }
-

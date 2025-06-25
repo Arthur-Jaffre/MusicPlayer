@@ -11,6 +11,7 @@ import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.ArtistAdapter
 import fr.arthur.musicplayer.helpers.AppConstants.COLUMNS_NUMBER
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class ArtistListFragment : Fragment() {
@@ -30,11 +31,12 @@ class ArtistListFragment : Fragment() {
         adapter = ArtistAdapter()
         recyclerView.adapter = adapter
 
-        viewModel.musicsObservable.observe {
+        viewModel.artistsObservable.observe {
             adapter.submitList(it)
         }
 
-        viewModel.loadArtists()
+            viewModel.loadArtists()
+
 
         return view
     }

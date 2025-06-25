@@ -17,18 +17,25 @@ import org.koin.dsl.module
 val appModule = module {
 
     single {
-        Room.databaseBuilder<AppDatabase>(
+        Room.databaseBuilder(
             androidContext(),
+            AppDatabase::class.java,
             DB_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
     }
 
     single { get<AppDatabase>().musicDao() }
+    single { get<AppDatabase>().albumDao() }
+    single { get<AppDatabase>().artistDao() }
+    single { get<AppDatabase>().playlistDao() }
+    single { get<AppDatabase>().playlistDao() }
 
     single { FolderUriStore(get()) }
     single { MusicScanner(get(), get()) }
 
-    single { MusicRepository(get(), get()) } // MusicScanner, TrackDao
+    single { MusicRepository(get(), get(), get(), get(), get()) }
     single<IMusicRepository> { get<MusicRepository>() }
 
     factory { GetAllMusicsUseCase(get()) }
