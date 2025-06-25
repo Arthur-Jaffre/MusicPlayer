@@ -2,17 +2,17 @@ package fr.arthur.musicplayer.viewModel
 
 import fr.arthur.musicplayer.models.Playlist
 import fr.arthur.musicplayer.observer.SimpleObservable
-import fr.arthur.musicplayer.usecase.GetAllPlaylistUseCase
+import fr.arthur.musicplayer.usecase.PlaylistUseCase
 import kotlinx.coroutines.launch
 
 class PlayListListViewModel(
-    private val getAllPlaylistUseCase: GetAllPlaylistUseCase
-): BaseListViewModel() {
+    private val playlistUseCase: PlaylistUseCase
+) : BaseListViewModel() {
     val playlistObservable = SimpleObservable<List<Playlist>>()
 
     fun loadPlaylists() {
         scope.launch {
-            val playlist = getAllPlaylistUseCase.execute()
+            val playlist = playlistUseCase.execute()
             playlistObservable.post(playlist)
         }
     }

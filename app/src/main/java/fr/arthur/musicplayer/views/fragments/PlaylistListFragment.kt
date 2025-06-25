@@ -44,6 +44,12 @@ class PlaylistListFragment : Fragment() {
         val favoriteItem = view.findViewById<View>(R.id.favorite)
         val titleView = favoriteItem.findViewById<TextView>(R.id.title)
         titleView.text = getString(R.string.favoris_playlist)
+        favoriteItem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FavoritesFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         val recentlyAddedItem = view.findViewById<View>(R.id.recently_added)
         val titleView2 = recentlyAddedItem.findViewById<TextView>(R.id.title)
