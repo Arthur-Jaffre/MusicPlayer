@@ -13,6 +13,12 @@ class MusicListViewModel(
     val musicsObservable = SimpleObservable<List<Music>>()
     private val musics = mutableListOf<Music>()
 
+    fun addToFavorites(music: Music) {
+        scope.launch {
+            musicUseCase.addMusicToFavorites(music)
+        }
+    }
+
     fun loadMusics() {
         musics.clear()
         musicsObservable.post(emptyList())

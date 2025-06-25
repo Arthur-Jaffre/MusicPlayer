@@ -17,9 +17,10 @@ interface IMusicRepository {
             isFavorite = isFavorite
         )
     }
-    
+
     suspend fun loadCachedMusics(): List<Music>
     suspend fun getMusicsFromAlbum(albumId: String): List<Music>
     suspend fun getAllFavoritesMusics(): List<Music>
+    suspend fun addMusicToFavorites(music: Music)
 
 }

@@ -21,4 +21,14 @@
     <string name="recently_added_playlist">Ajoutées récemment</string>
     <string name="select_folder">Choisir un dossier</string>
     <string name="select_folder_desc">Sélectionnez le dossier où vos musiques sont stockées.\n\nVous ne pourrez écouter que les fichiers contenus dans ce dossier.</string>
+    <string name="no_music_found">Aucune musique trouvée</string>
+    <string name="play">Lecture</string>
+    <string name="play_next">Lire juste après</string>
+    <string name="artist">Artiste</string>
+    <string name="add_to_playlist">Ajouter à la playlist</string>
+    <string name="edit_tags">Éditer les tags</string>
+    <string name="delete">Supprimer</string>
+    <string name="remove_to_playlist">Retirer de la playlist</string>
+    <string name="add_to_favoris">Ajouter aux favoris</string>
+    <string name="music_added_to_favorites">Musique ajoutée aux favoris</string>
 </resources>

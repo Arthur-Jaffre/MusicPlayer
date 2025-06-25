@@ -12,4 +12,8 @@ class MusicUseCase(private val repository: IMusicRepository) {
     suspend fun getAllFavoritesMusics(): List<Music> {
         return repository.getAllFavoritesMusics()
     }
+
+    suspend fun addMusicToFavorites(music: Music) {
+        repository.addMusicToFavorites(music)
+    }
 }
