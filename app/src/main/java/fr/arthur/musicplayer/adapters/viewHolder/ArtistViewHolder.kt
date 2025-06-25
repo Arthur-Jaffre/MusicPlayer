@@ -13,6 +13,6 @@ class ArtistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(artist: Artist) {
         artistImage.setImageResource(R.drawable.ic_default_artist)
-        artistName.text = artist.name
+        artistName.text = artist.id
     }
 }

@@ -30,7 +30,7 @@ class PlaylistListFragment : Fragment() {
         adapter = PlayListAdapter()
         recyclerView.adapter = adapter
 
-        viewModel.musicsObservable.observe {
+        viewModel.playlistObservable.observe {
             adapter.submitList(it)
         }
 

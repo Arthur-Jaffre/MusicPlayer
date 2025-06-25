@@ -5,19 +5,19 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import fr.arthur.musicplayer.room.MusicEntity
+import fr.arthur.musicplayer.room.entities.MusicEntity
 
 @Dao
 interface MusicDAO {
     @Query("SELECT * FROM music")
     suspend fun getAll(): List<MusicEntity>
 
+    @Query("SELECT * FROM music WHERE albumId = :albumId")
+    suspend fun getFromAlbum(albumId: String): List<MusicEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(tracks: List<MusicEntity>)
+    suspend fun insertAll(musics: List<MusicEntity>)
 
     @Delete
-    suspend fun delete(tracks: List<MusicEntity>)
-
-    @Query("DELETE FROM music")
-    suspend fun clear()
+    suspend fun delete(musics: List<MusicEntity>)
 }

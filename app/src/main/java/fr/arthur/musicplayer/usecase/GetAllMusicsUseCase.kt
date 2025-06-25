@@ -1,19 +1,11 @@
 package fr.arthur.musicplayer.usecase
 
 import fr.arthur.musicplayer.models.Music
-import fr.arthur.musicplayer.repositories.MusicRepository
+import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
 
-class GetAllMusicsUseCase(private val repository: MusicRepository) {
+class GetAllMusicsUseCase(private val repository: IMusicRepository) {
 
     suspend fun loadCachedMusics(): List<Music> {
         return repository.loadCachedMusics()
     }
-
-    suspend fun scanAndSaveMusics(
-        onMusicFound: (Music) -> Unit,
-        onComplete: () -> Unit
-    ) {
-        repository.scanAndSaveMusics(onMusicFound, onComplete)
-    }
 }
-

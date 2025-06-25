@@ -1,7 +1,8 @@
 package fr.arthur.musicplayer.models
 
-data class Playlist(
+data class Album(
     val id: String,
     val name: String? = null,
-    val numberOfMusics: Int = 0
+    val artistId: String,
+    val imageUri: String? = null
 )
