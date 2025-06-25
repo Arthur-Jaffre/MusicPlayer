@@ -3,13 +3,12 @@ package fr.arthur.musicplayer.viewModel
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.observer.SimpleObservable
 import fr.arthur.musicplayer.usecase.GetAllMusicsUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import fr.arthur.musicplayer.usecase.ScannerUseCase
 import kotlinx.coroutines.launch
 
 class MusicListViewModel(
-    private val getAllMusicsUseCase: GetAllMusicsUseCase
+    private val getAllMusicsUseCase: GetAllMusicsUseCase,
+    private val scannerUseCase: ScannerUseCase
 ) : BaseListViewModel() {
     val musicsObservable = SimpleObservable<List<Music>>()
     private val musics = mutableListOf<Music>()
@@ -23,7 +22,7 @@ class MusicListViewModel(
 
             if (cached.isEmpty()) {
                 // Base vide → lancer un scan complet puis sauvegarder dans Room
-                getAllMusicsUseCase.scanAndSaveMusics(
+                scannerUseCase.scanAndSave(
                     onMusicFound = { /* on ne met rien à jour ici */ },
                     onComplete = {
                         // Après scan, recharger la base Room
@@ -40,7 +39,7 @@ class MusicListViewModel(
                 musicsObservable.post(musics.sortedBy { it.title })
 
                 // Puis lancer un scan asynchrone en fond pour mise à jour intelligente
-                getAllMusicsUseCase.scanAndSaveMusics(
+                scannerUseCase.scanAndSave(
                     onMusicFound = { /* rien */ },
                     onComplete = {
                         scope.launch {
