@@ -20,4 +20,7 @@ interface MusicDAO {
 
     @Delete
     suspend fun delete(musics: List<MusicEntity>)
+
+    @Query("SELECT * FROM music WHERE isFavorite = 1")
+    suspend fun getAllFavoritesMusics(): List<MusicEntity>
 }
