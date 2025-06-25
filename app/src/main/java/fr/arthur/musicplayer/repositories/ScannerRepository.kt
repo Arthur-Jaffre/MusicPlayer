@@ -26,12 +26,8 @@ class ScannerRepository(
         val artistsBuffer = mutableMapOf<String, ArtistEntity>()
         val albumsBuffer = mutableMapOf<Pair<String, String>, AlbumEntity>()
 
-        val artistNameToId = mutableMapOf<String, String>()
         val albumKeyToId = mutableMapOf<Pair<String, String>, String>()
 
-        artistDao.getAll().forEach {
-            if (!it.name.isNullOrBlank()) artistNameToId[it.name] = it.id
-        }
         albumDao.getAll().forEach {
             if (!it.name.isNullOrBlank()) albumKeyToId[it.name to it.artistId] = it.id
         }
@@ -40,21 +36,19 @@ class ScannerRepository(
             val artistName = rawMusic.artistId.ifBlank { UNKNOWN_ITEM }
             val albumName = rawMusic.albumId.ifBlank { UNKNOWN_ITEM }
 
-            val artistId = artistNameToId.getOrPut(artistName) {
-                val newId = java.util.UUID.randomUUID().toString()
-                artistsBuffer[newId] = ArtistEntity(id = newId, name = artistName)
-                newId
+            if (!artistsBuffer.containsKey(artistName)) {
+                artistsBuffer[artistName] = ArtistEntity(id = artistName)
             }
 
-            val albumKey = albumName to artistId
+            val albumKey = albumName to artistName
             val albumId = albumKeyToId.getOrPut(albumKey) {
                 val newId = java.util.UUID.randomUUID().toString()
                 albumsBuffer[albumKey] =
-                    AlbumEntity(id = newId, name = albumName, artistId = artistId)
+                    AlbumEntity(id = newId, name = albumName, artistId = artistName)
                 newId
             }
 
-            val completeMusic = rawMusic.copy(artistId = artistId, albumId = albumId)
+            val completeMusic = rawMusic.copy(artistId = artistName, albumId = albumId)
             musicsBuffer.add(
                 MusicEntity(
                     id = completeMusic.id,

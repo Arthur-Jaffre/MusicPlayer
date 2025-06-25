@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.MediaMetadataRetriever
 import androidx.documentfile.provider.DocumentFile
 import fr.arthur.musicplayer.helpers.AppConstants.UNKNOWN_ITEM
-import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,17 +58,27 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                         val title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
                             ?: file.name ?: UNKNOWN_ITEM
 
-                        val durationMs = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                            ?.toIntOrNull() ?: 0
+                        val durationMs =
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                                ?.toIntOrNull() ?: 0
                         val duration = durationMs / 1000
+
+                        val artistName =
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+                                ?.takeIf { it.isNotBlank() } ?: UNKNOWN_ITEM
+
+                        val albumName =
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+                                ?.takeIf { it.isNotBlank() } ?: UNKNOWN_ITEM
 
                         val year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR)
                             ?.takeIf { it.length >= 4 }  // on prend que l'année
                             ?.substring(0, 4)
                             ?.toIntOrNull()
 
-                        val trackNumber = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER)
-                            ?.toIntOrNull()
+                        val trackNumber =
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER)
+                                ?.toIntOrNull()
 
                         val music = Music(
                             id = file.uri.toString(),
@@ -77,8 +86,8 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                             duration = duration,
                             year = year,
                             trackNumber = trackNumber,
-                            artistId = "",
-                            albumId = "",
+                            artistId = artistName,
+                            albumId = albumName,
                         )
 
                         withContext(Dispatchers.Main) {

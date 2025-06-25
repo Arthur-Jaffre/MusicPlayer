@@ -31,7 +31,7 @@ val appModule = module {
             AppDatabase::class.java,
             DB_NAME
         )
-//            .fallbackToDestructiveMigration(true)
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 
