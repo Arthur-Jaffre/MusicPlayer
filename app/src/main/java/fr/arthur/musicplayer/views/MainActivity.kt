@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         fragmentNavigator.showHomeMusics()
         fragmentNavigator.setup()
+
+        //DatabaseExporter.exportDatabaseWithWAL(this)
     }
 
     private fun handleFolderAccess() {
@@ -62,4 +64,5 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionHandler.handlePermissionResult(requestCode, grantResults)
     }
+
 }
