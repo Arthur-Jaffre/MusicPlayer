@@ -11,6 +11,6 @@ class ArtistRepository(
     override suspend fun getAllArtists(): List<Artist> {
         return artistDao.getAll().map {
             Artist(id = it.id)
-        }
+        }.sortedBy { it.id }
     }
 }
