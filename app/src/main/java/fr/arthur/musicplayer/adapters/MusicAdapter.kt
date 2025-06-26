@@ -3,6 +3,7 @@ package fr.arthur.musicplayer.adapters
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.MusicViewHolder
 import fr.arthur.musicplayer.models.Music
+import fr.arthur.musicplayer.views.activities.EditMusicActivity
 
 class MusicAdapter(
     private val toFavorites: ((Music) -> Unit)? = null,
@@ -73,11 +75,9 @@ class MusicAdapter(
 
         view.findViewById<Button>(R.id.btn_edit_tags).setOnClickListener {
             // Implémenter Éditer les tags
-            dialog.dismiss()
-        }
-
-        view.findViewById<Button>(R.id.btn_delete).setOnClickListener {
-            // Implémenter Supprimer
+            val intent = Intent(context, EditMusicActivity::class.java)
+            intent.putExtra("music", music)
+            context.startActivity(intent)
             dialog.dismiss()
         }
 

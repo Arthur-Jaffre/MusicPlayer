@@ -22,8 +22,7 @@ class FavoritesViewModel(
         scope.launch {
             musicUseCase.updateFavorites(music)
         }
-        // mettre à jour la liste des favoris
-        loadFavorites()
+
     }
 
     fun getFavoritesCount(): Int {

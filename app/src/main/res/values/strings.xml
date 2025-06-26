@@ -7,6 +7,9 @@
     <string name="options_icon_music">Options de la musique</string>
     <string name="options_icon_playlist">Options de la playlist</string>
     <string name="default_title">Titre de la musique</string>
+    <string name="form_year">Année</string>
+    <string name="form_music_number">Numéro de piste</string>
+    <string name="form_save_button">Enregistrer</string>
     <string name="default_artist">Artiste</string>
     <string name="default_album">Album</string>
     <string name="music_title">Titre de la musique</string>
