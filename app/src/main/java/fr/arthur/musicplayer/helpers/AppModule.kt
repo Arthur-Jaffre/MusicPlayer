@@ -13,13 +13,15 @@ import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
 import fr.arthur.musicplayer.repositories.interfaces.IPlaylistRepository
 import fr.arthur.musicplayer.repositories.interfaces.IScannerRepository
 import fr.arthur.musicplayer.room.AppDatabase
-import fr.arthur.musicplayer.usecase.GetAllArtistsUseCase
-import fr.arthur.musicplayer.usecase.GetAllMusicsUseCase
-import fr.arthur.musicplayer.usecase.GetAllPlaylistUseCase
+import fr.arthur.musicplayer.usecase.ArtistUseCase
+import fr.arthur.musicplayer.usecase.MusicUseCase
+import fr.arthur.musicplayer.usecase.PlaylistUseCase
 import fr.arthur.musicplayer.usecase.ScannerUseCase
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
+import fr.arthur.musicplayer.viewModel.FavoritesViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import fr.arthur.musicplayer.viewModel.RecentlyAddedViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -31,7 +33,7 @@ val appModule = module {
             AppDatabase::class.java,
             DB_NAME
         )
-            .fallbackToDestructiveMigration(true)
+//            .fallbackToDestructiveMigration(true)
             .build()
     }
 
@@ -56,12 +58,15 @@ val appModule = module {
     single<IPlaylistRepository> { get<PlaylistRepository>() }
     single<IScannerRepository> { get<ScannerRepository>() }
 
-    factory { GetAllMusicsUseCase(get()) }
-    factory { GetAllArtistsUseCase(get()) }
-    factory { GetAllPlaylistUseCase(get()) }
+    factory { MusicUseCase(get()) }
+    factory { ArtistUseCase(get()) }
+    factory { PlaylistUseCase(get()) }
     factory { ScannerUseCase(get()) }
 
     factory { MusicListViewModel(get(), get()) }
     factory { ArtistListViewModel(get()) }
     factory { PlayListListViewModel(get()) }
+    factory { FavoritesViewModel(get()) }
+    factory { RecentlyAddedViewModel(get()) }
+
 }

@@ -2,23 +2,29 @@ package fr.arthur.musicplayer.viewModel
 
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.observer.SimpleObservable
-import fr.arthur.musicplayer.usecase.GetAllMusicsUseCase
+import fr.arthur.musicplayer.usecase.MusicUseCase
 import fr.arthur.musicplayer.usecase.ScannerUseCase
 import kotlinx.coroutines.launch
 
 class MusicListViewModel(
-    private val getAllMusicsUseCase: GetAllMusicsUseCase,
+    private val musicUseCase: MusicUseCase,
     private val scannerUseCase: ScannerUseCase
 ) : BaseListViewModel() {
     val musicsObservable = SimpleObservable<List<Music>>()
     private val musics = mutableListOf<Music>()
+
+    fun toFavorites(music: Music) {
+        scope.launch {
+            musicUseCase.updateFavorites(music)
+        }
+    }
 
     fun loadMusics() {
         musics.clear()
         musicsObservable.post(emptyList())
 
         scope.launch {
-            val cached = getAllMusicsUseCase.loadCachedMusics()
+            val cached = musicUseCase.loadCachedMusics()
 
             if (cached.isEmpty()) {
                 // Base vide → lancer un scan complet puis sauvegarder dans Room
@@ -27,7 +33,7 @@ class MusicListViewModel(
                     onComplete = {
                         // Après scan, recharger la base Room
                         scope.launch {
-                            musics.addAll(getAllMusicsUseCase.loadCachedMusics())
+                            musics.addAll(musicUseCase.loadCachedMusics())
                             musicsObservable.post(musics.sortedBy { it.title })
                         }
                     }
@@ -43,7 +49,7 @@ class MusicListViewModel(
                     onComplete = {
                         scope.launch {
                             musics.clear()
-                            musics.addAll(getAllMusicsUseCase.loadCachedMusics())
+                            musics.addAll(musicUseCase.loadCachedMusics())
                             musicsObservable.post(musics.sortedBy { it.title })
                         }
                     }

@@ -5,4 +5,5 @@ object AppConstants {
     const val TITLES_MAX_LENGTH = 39
     const val DB_NAME = "music-db"
     const val UNKNOWN_ITEM = "Inconnu"
+    const val MAX_RECENTLY_ADDED = 25
 }

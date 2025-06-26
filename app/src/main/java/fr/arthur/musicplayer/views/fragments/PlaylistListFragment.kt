@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,7 @@ class PlaylistListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_playlist, container, false)
+        val view = inflater.inflate(R.layout.fragment_playlist_page, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -42,11 +43,25 @@ class PlaylistListFragment : Fragment() {
 
     private fun setupPlaylistNames(view: View) {
         val favoriteItem = view.findViewById<View>(R.id.favorite)
+        favoriteItem.findViewById<ImageView>(R.id.icon_more).visibility = View.GONE
         val titleView = favoriteItem.findViewById<TextView>(R.id.title)
         titleView.text = getString(R.string.favoris_playlist)
+        favoriteItem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FavoritesFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         val recentlyAddedItem = view.findViewById<View>(R.id.recently_added)
+        recentlyAddedItem.findViewById<ImageView>(R.id.icon_more).visibility = View.GONE
         val titleView2 = recentlyAddedItem.findViewById<TextView>(R.id.title)
         titleView2.text = getString(R.string.recently_added_playlist)
+        recentlyAddedItem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, RecentlyAddedFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }
