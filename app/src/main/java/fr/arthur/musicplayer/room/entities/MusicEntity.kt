@@ -26,7 +26,8 @@ data class MusicEntity(
     val year: Int?,
     val trackNumber: Int?,
     val imageUri: String?,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
+    val addedAt: Long
 ) {
     override fun equals(other: Any?) = other is MusicEntity &&
             id == other.id &&
@@ -37,7 +38,8 @@ data class MusicEntity(
             year == other.year &&
             trackNumber == other.trackNumber &&
             imageUri == other.imageUri &&
-            isFavorite == other.isFavorite
+            isFavorite == other.isFavorite &&
+            addedAt == other.addedAt
 
     override fun hashCode() = id.hashCode()
 }

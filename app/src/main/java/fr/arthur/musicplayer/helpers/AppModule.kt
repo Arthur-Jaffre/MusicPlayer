@@ -21,6 +21,7 @@ import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.FavoritesViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import fr.arthur.musicplayer.viewModel.RecentlyAddedViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -66,4 +67,6 @@ val appModule = module {
     factory { ArtistListViewModel(get()) }
     factory { PlayListListViewModel(get()) }
     factory { FavoritesViewModel(get()) }
+    factory { RecentlyAddedViewModel(get()) }
+
 }

@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import fr.arthur.musicplayer.helpers.AppConstants.MAX_RECENTLY_ADDED
 import fr.arthur.musicplayer.room.entities.MusicEntity
 
 @Dao
@@ -26,4 +27,7 @@ interface MusicDAO {
 
     @Query("UPDATE music SET isFavorite = :favorite WHERE id = :musicId")
     suspend fun updateFavorites(musicId: String, favorite: Int)
+
+    @Query("SELECT * FROM music ORDER BY addedAt DESC LIMIT :maxMusics")
+    suspend fun getRecentlyAdded(maxMusics: Int = MAX_RECENTLY_ADDED): List<MusicEntity>
 }

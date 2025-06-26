@@ -24,4 +24,8 @@ class MusicRepository(
         musicDao.updateFavorites(music.id, if (music.isFavorite) 1 else 0)
     }
 
+    override suspend fun getRecentlyAdded(): List<Music> {
+        return musicDao.getRecentlyAdded().map { it.toDomain() }
+    }
+
 }

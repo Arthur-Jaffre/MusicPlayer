@@ -9,5 +9,6 @@ data class Music(
     val year: Int? = null,
     val trackNumber: Int? = null,
     val imageUri: String? = null,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val addedAt: Long = System.currentTimeMillis()
 )

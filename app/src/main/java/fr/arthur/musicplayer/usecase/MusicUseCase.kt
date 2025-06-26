@@ -16,4 +16,9 @@ class MusicUseCase(private val repository: IMusicRepository) {
     suspend fun updateFavorites(music: Music) {
         repository.updateFavorites(music)
     }
+
+    suspend fun getRecentlyAdded(): List<Music> {
+        return repository.getRecentlyAdded()
+    }
+
 }

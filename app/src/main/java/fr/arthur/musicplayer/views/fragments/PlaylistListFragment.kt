@@ -54,5 +54,11 @@ class PlaylistListFragment : Fragment() {
         val recentlyAddedItem = view.findViewById<View>(R.id.recently_added)
         val titleView2 = recentlyAddedItem.findViewById<TextView>(R.id.title)
         titleView2.text = getString(R.string.recently_added_playlist)
+        recentlyAddedItem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, RecentlyAddedFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

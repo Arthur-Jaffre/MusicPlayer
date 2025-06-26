@@ -22,5 +22,5 @@ interface IMusicRepository {
     suspend fun getMusicsFromAlbum(albumId: String): List<Music>
     suspend fun getAllFavoritesMusics(): List<Music>
     suspend fun updateFavorites(music: Music)
-
+    suspend fun getRecentlyAdded(): List<Music>
 }

@@ -57,8 +57,10 @@ class ScannerRepository(
 
             val completeMusic = rawMusic.copy(artistId = artistName, albumId = albumId)
 
-            // Préserve l'état de isFavorite s'il existe en base
-            val isFavorite = cachedMap[completeMusic.id]?.isFavorite ?: false
+            // Préserve l'état
+            val existing = cachedMap[completeMusic.id]
+            val isFavorite = existing?.isFavorite == true
+            val addedAt = existing?.addedAt ?: System.currentTimeMillis()
 
             val entity = MusicEntity(
                 id = completeMusic.id,
@@ -69,7 +71,8 @@ class ScannerRepository(
                 year = completeMusic.year,
                 trackNumber = completeMusic.trackNumber,
                 imageUri = completeMusic.imageUri,
-                isFavorite = isFavorite
+                isFavorite = isFavorite,
+                addedAt = addedAt
             )
 
             musicsBuffer.add(entity)
