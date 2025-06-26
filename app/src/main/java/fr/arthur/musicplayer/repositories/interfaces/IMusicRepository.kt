@@ -1,20 +1,21 @@
 package fr.arthur.musicplayer.repositories.interfaces
 
 import fr.arthur.musicplayer.models.Music
-import fr.arthur.musicplayer.room.entities.MusicEntity
+import fr.arthur.musicplayer.room.entities.MusicWithArtists
 
 interface IMusicRepository {
-    fun MusicEntity.toDomain(): Music {
+    fun MusicWithArtists.toDomain(): Music {
         return Music(
-            id = id,
-            title = title,
-            duration = duration,
-            artistId = artistId,
-            albumId = albumId,
-            year = year,
-            trackNumber = trackNumber,
-            imageUri = imageUri,
-            isFavorite = isFavorite
+            id = music.id,
+            title = music.title,
+            duration = music.duration,
+            albumId = music.albumId,
+            year = music.year,
+            trackNumber = music.trackNumber,
+            imageUri = music.imageUri,
+            isFavorite = music.isFavorite,
+            addedAt = music.addedAt,
+            artistIds = artists.map { it.id }
         )
     }
 
