@@ -13,10 +13,12 @@ import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
 import fr.arthur.musicplayer.repositories.interfaces.IPlaylistRepository
 import fr.arthur.musicplayer.repositories.interfaces.IScannerRepository
 import fr.arthur.musicplayer.room.AppDatabase
+import fr.arthur.musicplayer.usecase.AlbumUseCase
 import fr.arthur.musicplayer.usecase.ArtistUseCase
 import fr.arthur.musicplayer.usecase.MusicUseCase
 import fr.arthur.musicplayer.usecase.PlaylistUseCase
 import fr.arthur.musicplayer.usecase.ScannerUseCase
+import fr.arthur.musicplayer.viewModel.AlbumListViewModel
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.FavoritesViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
@@ -61,11 +63,13 @@ val appModule = module {
     factory { MusicUseCase(get()) }
     factory { ArtistUseCase(get()) }
     factory { PlaylistUseCase(get()) }
+    factory { AlbumUseCase(get()) }
     factory { ScannerUseCase(get()) }
 
     factory { MusicListViewModel(get(), get()) }
     factory { ArtistListViewModel(get()) }
     factory { PlayListListViewModel(get()) }
+    factory { AlbumListViewModel(get()) }
     factory { FavoritesViewModel(get()) }
     factory { RecentlyAddedViewModel(get()) }
 

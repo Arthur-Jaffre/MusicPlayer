@@ -8,12 +8,14 @@
     <string name="options_icon_playlist">Options de la playlist</string>
     <string name="default_title">Titre de la musique</string>
     <string name="default_artist">Artiste</string>
+    <string name="default_album">Album</string>
     <string name="music_title">Titre de la musique</string>
     <string name="playlist_title">Titre de la playlist</string>
     <string name="playlist_number_of_musics">0 musique</string>
     <string name="music_artist">Artiste</string>
     <string name="menu_artists">Artistes</string>
     <string name="menu_musics">Musiques</string>
+    <string name="menu_albums">Albums</string>
     <string name="menu_playlists">Playlists</string>
     <string name="description_artist_cart">image artist</string>
     <string name="musics_number">" musiques"</string>
@@ -33,4 +35,5 @@
     <string name="remove_from_favoris">Retirer des favoris</string>
     <string name="updated_data">Musique modifiée</string>
     <string name="playlist_number_of_musics_count">Nombre de musiques : %d</string>
+    <string name="other_default_title">Titre</string>
 </resources>

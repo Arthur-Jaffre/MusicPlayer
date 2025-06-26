@@ -8,7 +8,7 @@ import fr.arthur.musicplayer.helpers.FolderUriStore
 import fr.arthur.musicplayer.helpers.PermissionHandler
 import fr.arthur.musicplayer.helpers.StorageDialog
 import fr.arthur.musicplayer.helpers.appModule
-import fr.arthur.musicplayer.views.fragments.MusicListFragment
+import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
 import fr.arthur.musicplayer.views.navigation.FragmentNavigator
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin

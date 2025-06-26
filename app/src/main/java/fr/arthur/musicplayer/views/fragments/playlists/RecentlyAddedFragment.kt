@@ -1,4 +1,4 @@
-package fr.arthur.musicplayer.views.fragments
+package fr.arthur.musicplayer.views.fragments.playlists
 
 import android.os.Bundle
 import android.view.LayoutInflater
