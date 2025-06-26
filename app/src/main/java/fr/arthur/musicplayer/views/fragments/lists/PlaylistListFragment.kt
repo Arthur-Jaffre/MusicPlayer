@@ -1,4 +1,4 @@
-package fr.arthur.musicplayer.views.fragments
+package fr.arthur.musicplayer.views.fragments.lists
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.PlayListAdapter
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import fr.arthur.musicplayer.views.fragments.playlists.FavoritesFragment
+import fr.arthur.musicplayer.views.fragments.playlists.RecentlyAddedFragment
 import org.koin.android.ext.android.inject
 
 class PlaylistListFragment : Fragment() {

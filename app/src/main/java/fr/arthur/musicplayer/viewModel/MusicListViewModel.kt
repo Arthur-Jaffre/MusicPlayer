@@ -1,5 +1,6 @@
 package fr.arthur.musicplayer.viewModel
 
+import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.observer.SimpleObservable
 import fr.arthur.musicplayer.usecase.MusicUseCase
@@ -16,6 +17,12 @@ class MusicListViewModel(
     fun toFavorites(music: Music) {
         scope.launch {
             musicUseCase.updateFavorites(music)
+        }
+    }
+
+    fun getMusicsByArtist(artist: Artist) {
+        scope.launch {
+            musicsObservable.post(musicUseCase.getMusicsByArtist(artist))
         }
     }
 

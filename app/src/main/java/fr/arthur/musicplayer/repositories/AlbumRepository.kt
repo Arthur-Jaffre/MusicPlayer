@@ -14,7 +14,7 @@ class AlbumRepository(
         }
     }
 
-    override suspend fun getAlbumsFromArtist(artistId: String): List<Album> {
+    override suspend fun getAlbumsByArtist(artistId: String): List<Album> {
         return albumDao.getFromArtist(artistId).map {
             Album(id = it.id, name = it.name, artistId = it.artistId)
         }

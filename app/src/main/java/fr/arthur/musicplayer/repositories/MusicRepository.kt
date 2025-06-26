@@ -28,4 +28,8 @@ class MusicRepository(
         return musicDao.getRecentlyAdded().map { it.toDomain() }
     }
 
+    override suspend fun getMusicsByArtist(artistId: String): List<Music> {
+        return musicDao.getFromArtist(artistId).map { it.toDomain() }
+    }
+
 }

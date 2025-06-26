@@ -30,4 +30,7 @@ interface MusicDAO {
 
     @Query("SELECT * FROM music ORDER BY addedAt DESC LIMIT :maxMusics")
     suspend fun getRecentlyAdded(maxMusics: Int = MAX_RECENTLY_ADDED): List<MusicEntity>
+    
+    @Query("SELECT * FROM music WHERE artistId = :artistId")
+    suspend fun getFromArtist(artistId: String): List<MusicEntity>
 }

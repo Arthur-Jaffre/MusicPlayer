@@ -4,50 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- En-tête avec ImageView, Titre et Sous-titre -->
-    <LinearLayout
+    <!-- Inclusion de l'en-tête -->
+    <include
         android:id="@+id/headerLayout"
+        layout="@layout/view_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_launcher_foreground" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/playlist_title"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/playlist_number_of_musics"
-                android:textColor="@color/lightGray"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-    </LinearLayout>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -62,5 +27,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout" />
+        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

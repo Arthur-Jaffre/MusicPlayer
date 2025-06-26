@@ -3,9 +3,9 @@ package fr.arthur.musicplayer.views.navigation
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import fr.arthur.musicplayer.R
-import fr.arthur.musicplayer.views.fragments.ArtistListFragment
-import fr.arthur.musicplayer.views.fragments.MusicListFragment
-import fr.arthur.musicplayer.views.fragments.PlaylistListFragment
+import fr.arthur.musicplayer.views.fragments.lists.ArtistListFragment
+import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
+import fr.arthur.musicplayer.views.fragments.lists.PlaylistListFragment
 
 class FragmentNavigator(private val activity: AppCompatActivity) {
 

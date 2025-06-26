@@ -8,8 +8,11 @@ import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.ArtistViewHolder
 import fr.arthur.musicplayer.models.Artist
 
-class ArtistAdapter : RecyclerView.Adapter<ArtistViewHolder>() {
+class ArtistAdapter(
+    var onArtistClick: ((Artist) -> Unit)? = null
+) : RecyclerView.Adapter<ArtistViewHolder>() {
     private val items = mutableListOf<Artist>()
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(newItems: List<Artist>) {
@@ -27,7 +30,13 @@ class ArtistAdapter : RecyclerView.Adapter<ArtistViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
-        holder.bind(items[position])
+        val artist = items[position]
+        holder.bind(artist)
+
+        holder.itemView.setOnClickListener {
+            // Navigation vers la page de l'artiste
+            onArtistClick?.invoke(artist)
+        }
     }
 
     override fun getItemCount(): Int = items.size

@@ -1,5 +1,6 @@
 package fr.arthur.musicplayer.usecase
 
+import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
 
@@ -19,6 +20,10 @@ class MusicUseCase(private val repository: IMusicRepository) {
 
     suspend fun getRecentlyAdded(): List<Music> {
         return repository.getRecentlyAdded()
+    }
+
+    suspend fun getMusicsByArtist(artist: Artist): List<Music> {
+        return repository.getMusicsByArtist(artist.id)
     }
 
 }
