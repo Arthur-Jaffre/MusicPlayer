@@ -106,6 +106,10 @@ class ScannerRepository(
         if (toInsertMusic.isNotEmpty()) musicDao.insertAll(toInsertMusic)
         if (toDeleteMusic.isNotEmpty()) musicDao.delete(toDeleteMusic)
 
+        // Nettoyage des artistes et albums orphelins
+        albumDao.deleteOrphanAlbums()
+        artistDao.deleteOrphanArtists()
+
         onComplete()
     }
 

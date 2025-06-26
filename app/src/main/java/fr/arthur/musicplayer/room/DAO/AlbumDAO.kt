@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import fr.arthur.musicplayer.room.entities.AlbumEntity
-import fr.arthur.musicplayer.room.entities.MusicEntity
 
 @Dao
 interface AlbumDAO {
@@ -21,4 +20,7 @@ interface AlbumDAO {
 
     @Delete
     suspend fun delete(albums: List<AlbumEntity>)
+
+    @Query("DELETE FROM album WHERE id NOT IN (SELECT DISTINCT albumId FROM music)")
+    suspend fun deleteOrphanAlbums()
 }
