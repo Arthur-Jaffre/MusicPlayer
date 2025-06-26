@@ -28,7 +28,10 @@ class FavoritesFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         adapter = MusicAdapter(
-            toFavorites = { music -> viewModel.toFavorites(music) },
+            toFavorites = { music ->
+                viewModel.toFavorites(music)
+                viewModel.loadFavorites() // mettre à jour la liste des favoris
+            },
             isFavorite = true
         )
 

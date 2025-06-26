@@ -1,4 +1,4 @@
-package fr.arthur.musicplayer.views
+package fr.arthur.musicplayer.views.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +11,7 @@ import fr.arthur.musicplayer.helpers.appModule
 import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
 import fr.arthur.musicplayer.views.navigation.FragmentNavigator
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragmentNavigator: FragmentNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        startKoin { androidContext(this@MainActivity); modules(appModule) }
+        GlobalContext.startKoin { androidContext(this@MainActivity); modules(appModule) }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
