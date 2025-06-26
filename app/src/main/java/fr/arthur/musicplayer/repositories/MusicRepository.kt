@@ -20,8 +20,8 @@ class MusicRepository(
         return musicDao.getAllFavoritesMusics().map { it.toDomain() }
     }
 
-    override suspend fun addMusicToFavorites(music: Music) {
-        musicDao.addMusicToFavorites(music.id)
+    override suspend fun updateFavorites(music: Music) {
+        musicDao.updateFavorites(music.id, if (music.isFavorite) 1 else 0)
     }
 
 }

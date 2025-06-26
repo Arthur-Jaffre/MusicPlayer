@@ -13,7 +13,7 @@ class MusicUseCase(private val repository: IMusicRepository) {
         return repository.getAllFavoritesMusics()
     }
 
-    suspend fun addMusicToFavorites(music: Music) {
-        repository.addMusicToFavorites(music)
+    suspend fun updateFavorites(music: Music) {
+        repository.updateFavorites(music)
     }
 }

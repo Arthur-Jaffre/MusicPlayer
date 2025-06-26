@@ -25,10 +25,11 @@ class MusicListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        adapter = MusicAdapter { music ->
-            viewModel.addToFavorites(music)
-        }
-        
+        adapter = MusicAdapter(
+            toFavorites = { music -> viewModel.toFavorites(music) },
+            isFavorite = false
+        )
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 

@@ -24,6 +24,6 @@ interface MusicDAO {
     @Query("SELECT * FROM music WHERE isFavorite = 1")
     suspend fun getAllFavoritesMusics(): List<MusicEntity>
 
-    @Query("UPDATE music SET isFavorite = 1 WHERE id = :musicId")
-    suspend fun addMusicToFavorites(musicId: String)
+    @Query("UPDATE music SET isFavorite = :favorite WHERE id = :musicId")
+    suspend fun updateFavorites(musicId: String, favorite: Int)
 }

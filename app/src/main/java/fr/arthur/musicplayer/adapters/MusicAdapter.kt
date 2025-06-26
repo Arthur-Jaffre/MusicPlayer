@@ -14,7 +14,8 @@ import fr.arthur.musicplayer.adapters.viewHolder.MusicViewHolder
 import fr.arthur.musicplayer.models.Music
 
 class MusicAdapter(
-    private val onAddToFavorites: ((Music) -> Unit)? = null
+    private val toFavorites: ((Music) -> Unit)? = null,
+    private val isFavorite: Boolean = false
 ) : RecyclerView.Adapter<MusicViewHolder>() {
     private val items = mutableListOf<Music>()
 
@@ -45,12 +46,15 @@ class MusicAdapter(
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_music_options, null)
         val dialog = AlertDialog.Builder(context).setView(view).create()
 
-        view.findViewById<Button>(R.id.btn_favoris).setOnClickListener {
-            // Implémenter Ajouter aux favoris
-            onAddToFavorites?.invoke(music)
-            Toast.makeText(context, R.string.music_added_to_favorites, Toast.LENGTH_SHORT).show()
+        val favoriteBtn = view.findViewById<Button>(R.id.btn_favoris)
+        if (isFavorite) favoriteBtn.text = context.getString(R.string.remove_from_favoris)
+        // bouton "ajouter aux favoris"
+        favoriteBtn.setOnClickListener {
+            toFavorites?.invoke(music.copy(isFavorite = !isFavorite))
+            Toast.makeText(context, R.string.updated_data, Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
+
 
         view.findViewById<Button>(R.id.btn_play_next).setOnClickListener {
             // Implémenter l'action Lire juste après

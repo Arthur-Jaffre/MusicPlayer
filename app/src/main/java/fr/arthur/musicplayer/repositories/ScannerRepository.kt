@@ -28,11 +28,18 @@ class ScannerRepository(
 
         val albumKeyToId = mutableMapOf<Pair<String, String>, String>()
 
+        // Récupère les albums déjà en base
         albumDao.getAll().forEach {
             if (!it.name.isNullOrBlank()) albumKeyToId[it.name to it.artistId] = it.id
         }
 
+        // Récupère les musiques déjà en base, pour préserver les favoris
+        val cachedMusic = musicDao.getAll()
+        val cachedMap = cachedMusic.associateBy { it.id }
+
+        // Scan du stockage interne
         scanner.scanAudioFilesSuspend { rawMusic ->
+
             val artistName = rawMusic.artistId.ifBlank { UNKNOWN_ITEM }
             val albumName = rawMusic.albumId.ifBlank { UNKNOWN_ITEM }
 
@@ -49,45 +56,54 @@ class ScannerRepository(
             }
 
             val completeMusic = rawMusic.copy(artistId = artistName, albumId = albumId)
-            musicsBuffer.add(
-                MusicEntity(
-                    id = completeMusic.id,
-                    title = completeMusic.title,
-                    duration = completeMusic.duration,
-                    artistId = completeMusic.artistId,
-                    albumId = completeMusic.albumId,
-                    year = completeMusic.year,
-                    trackNumber = completeMusic.trackNumber,
-                    imageUri = completeMusic.imageUri,
-                    isFavorite = completeMusic.isFavorite
-                )
+
+            // Préserve l'état de isFavorite s'il existe en base
+            val isFavorite = cachedMap[completeMusic.id]?.isFavorite ?: false
+
+            val entity = MusicEntity(
+                id = completeMusic.id,
+                title = completeMusic.title,
+                duration = completeMusic.duration,
+                artistId = completeMusic.artistId,
+                albumId = completeMusic.albumId,
+                year = completeMusic.year,
+                trackNumber = completeMusic.trackNumber,
+                imageUri = completeMusic.imageUri,
+                isFavorite = isFavorite
             )
+
+            musicsBuffer.add(entity)
 
             onMusicFound(completeMusic)
         }
 
+        // Insert artistes manquants
         val cachedArtists = artistDao.getAll()
         val toInsertArtist =
             artistsBuffer.values.filter { new -> cachedArtists.none { it.id == new.id } }
         if (toInsertArtist.isNotEmpty()) artistDao.insertAll(toInsertArtist)
 
+        // Insert albums manquants
         val cachedAlbums = albumDao.getAll()
         val toInsertAlbum =
             albumsBuffer.values.filter { new -> cachedAlbums.none { it.id == new.id } }
         if (toInsertAlbum.isNotEmpty()) albumDao.insertAll(toInsertAlbum)
 
-        val cachedMusic = musicDao.getAll()
-        val cachedMap = cachedMusic.associateBy { it.id }
+        // Calcul des différences avec le cache existant
         val scannedMap = musicsBuffer.associateBy { it.id }
 
-        val toInsertMusic = musicsBuffer.filter { track ->
-            cachedMap[track.id] == null || cachedMap[track.id] != track
+        val toInsertMusic = musicsBuffer.filter { new ->
+            val existing = cachedMap[new.id]
+            existing == null || existing != new
         }
-        val toDeleteMusic = cachedMusic.filter { it.id !in scannedMap }
 
+        val toDeleteMusic = cachedMap.values.filter { it.id !in scannedMap }
+
+        // Mise à jour BD
         if (toInsertMusic.isNotEmpty()) musicDao.insertAll(toInsertMusic)
         if (toDeleteMusic.isNotEmpty()) musicDao.delete(toDeleteMusic)
 
         onComplete()
     }
+
 }

@@ -21,6 +21,6 @@ interface IMusicRepository {
     suspend fun loadCachedMusics(): List<Music>
     suspend fun getMusicsFromAlbum(albumId: String): List<Music>
     suspend fun getAllFavoritesMusics(): List<Music>
-    suspend fun addMusicToFavorites(music: Music)
+    suspend fun updateFavorites(music: Music)
 
 }
