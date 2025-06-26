@@ -3,7 +3,7 @@ package fr.arthur.musicplayer.models
 data class Music(
     val id: String,
     val title: String? = null,
-    val artistId: String,
+    val artistIds: List<String>,
     val albumId: String,
     val duration: Int? = null,
     val year: Int? = null,

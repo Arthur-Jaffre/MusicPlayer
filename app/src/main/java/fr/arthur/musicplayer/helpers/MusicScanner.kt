@@ -52,7 +52,7 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
             } else if (file.isFile && file.type?.startsWith("audio/") == true) {
                 val mmr = MediaMetadataRetriever()
                 try {
-                    context.contentResolver.openFileDescriptor(file.uri, "r")?.use {
+                    context.contentResolver.openFileDescriptor(file.uri, "r")?.use { it ->
                         mmr.setDataSource(it.fileDescriptor)
 
                         val title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
@@ -63,9 +63,12 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                                 ?.toIntOrNull() ?: 0
                         val duration = durationMs / 1000
 
-                        val artistName =
+                        val artistIds =
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-                                ?.takeIf { it.isNotBlank() } ?: UNKNOWN_ITEM
+                                ?.split(';', ',', '/', '&')
+                                ?.map { it.trim() }
+                                ?.filter { it.isNotEmpty() }
+                                ?: listOf(UNKNOWN_ITEM)
 
                         val albumName =
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
@@ -86,7 +89,7 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                             duration = duration,
                             year = year,
                             trackNumber = trackNumber,
-                            artistId = artistName,
+                            artistIds = artistIds,
                             albumId = albumName,
                         )
 

@@ -9,18 +9,16 @@ import androidx.room.PrimaryKey
     tableName = "music",
     foreignKeys = [
         ForeignKey(
-            entity = ArtistEntity::class,
+            entity = AlbumEntity::class,
             parentColumns = ["id"],
-            childColumns = ["artistId"]
-        ),
-        ForeignKey(entity = AlbumEntity::class, parentColumns = ["id"], childColumns = ["albumId"])
+            childColumns = ["albumId"]
+        )
     ],
-    indices = [Index("artistId"), Index("albumId")]
+    indices = [Index("albumId")]
 )
 data class MusicEntity(
     @PrimaryKey val id: String,
     val title: String?,
-    val artistId: String,
     val albumId: String,
     val duration: Int?,
     val year: Int?,
@@ -32,7 +30,6 @@ data class MusicEntity(
     override fun equals(other: Any?) = other is MusicEntity &&
             id == other.id &&
             title == other.title &&
-            artistId == other.artistId &&
             albumId == other.albumId &&
             duration == other.duration &&
             year == other.year &&

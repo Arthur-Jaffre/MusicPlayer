@@ -44,6 +44,7 @@ val appModule = module {
     single { get<AppDatabase>().artistDao() }
     single { get<AppDatabase>().playlistDao() }
     single { get<AppDatabase>().playlistDao() }
+    single { get<AppDatabase>().MusicArtistDAO() }
 
     single { FolderUriStore(get()) }
     single { MusicScanner(get(), get()) }
@@ -52,7 +53,7 @@ val appModule = module {
     single { AlbumRepository(get()) }
     single { ArtistRepository(get()) }
     single { PlaylistRepository(get()) }
-    single { ScannerRepository(get(), get(), get(), get()) }
+    single { ScannerRepository(get(), get(), get(), get(), get()) }
 
     single<IMusicRepository> { get<MusicRepository>() }
     single<IAlbumRepository> { get<AlbumRepository>() }

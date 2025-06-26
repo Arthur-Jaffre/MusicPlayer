@@ -18,6 +18,6 @@ interface ArtistDAO {
     @Delete
     suspend fun delete(artists: List<ArtistEntity>)
 
-    @Query("DELETE FROM artist WHERE id NOT IN (SELECT DISTINCT artistId FROM music) AND id NOT IN (SELECT DISTINCT artistId FROM album)")
+    @Query("DELETE FROM artist WHERE id NOT IN (SELECT artistId FROM MusicArtistCrossRef)")
     suspend fun deleteOrphanArtists()
 }
