@@ -1,5 +1,6 @@
 package fr.arthur.musicplayer.viewModel
 
+import fr.arthur.musicplayer.models.Album
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.observer.SimpleObservable
@@ -23,6 +24,12 @@ class MusicListViewModel(
     fun getMusicsByArtist(artist: Artist) {
         scope.launch {
             musicsObservable.post(musicUseCase.getMusicsByArtist(artist))
+        }
+    }
+
+    fun getMusicsByAlbum(album: Album) {
+        scope.launch {
+            musicsObservable.post(musicUseCase.getMusicsByAlbum(album))
         }
     }
 

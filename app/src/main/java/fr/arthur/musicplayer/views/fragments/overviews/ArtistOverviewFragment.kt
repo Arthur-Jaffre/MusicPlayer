@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.AlbumAdapter
 import fr.arthur.musicplayer.adapters.MusicAdapter
+import fr.arthur.musicplayer.models.Album
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.viewModel.AlbumListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
@@ -76,9 +77,25 @@ class ArtistOverviewFragment : Fragment() {
     private fun setupAlbumRecyclerView(view: View) {
         val albumRecyclerView = view.findViewById<RecyclerView>(R.id.album_recyclerView)
         albumAdapter = AlbumAdapter()
+        setupAlbumAdapterClickListener()
         albumRecyclerView.adapter = albumAdapter
         albumRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    private fun setupAlbumAdapterClickListener() {
+        albumAdapter.onAlbumClick = { album ->
+            // Naviguer vers la page de l'album
+            navigateToAlbumOverview(album)
+        }
+    }
+
+    private fun navigateToAlbumOverview(album: Album) {
+        val fragment = AlbumOverviewFragment.newInstance(album)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupMusicRecyclerView(view: View) {
