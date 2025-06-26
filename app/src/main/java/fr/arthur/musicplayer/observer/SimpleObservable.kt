@@ -6,7 +6,7 @@ import android.os.Looper
 // presentation/observer/SimpleObservable.kt
 class SimpleObservable<T> {
     private val observers = mutableListOf<(T) -> Unit>()
-    private var value: T? = null
+    internal var value: T? = null
 
     fun observe(observer: (T) -> Unit) {
         value?.let { safeCall(observer, it) }

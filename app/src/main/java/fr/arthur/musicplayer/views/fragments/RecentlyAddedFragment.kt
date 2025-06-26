@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +24,7 @@ class RecentlyAddedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_playlists, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         adapter = MusicAdapter(
@@ -33,16 +35,26 @@ class RecentlyAddedFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.recentlyAddedObservable.observe {
-            adapter.submitList(it)
-            if (it.isEmpty()) {
+        viewModel.recentlyAddedObservable.observe { recent ->
+            adapter.submitList(recent)
+
+            view.findViewById<TextView>(R.id.subtitle).text =
+                getString(R.string.playlist_number_of_musics_count, recent.size)
+
+            if (recent.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_music_found, Toast.LENGTH_SHORT).show()
             }
         }
 
         viewModel.loadRecentlyAdded()
 
+        setupFragment(view)
+
         return view
     }
 
+    private fun setupFragment(view: View) {
+        view.findViewById<TextView>(R.id.title).text = getString(R.string.recently_added_playlist)
+        view.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_recently)
+    }
 }

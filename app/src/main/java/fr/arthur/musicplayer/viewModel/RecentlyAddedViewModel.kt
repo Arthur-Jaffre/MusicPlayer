@@ -21,4 +21,8 @@ class RecentlyAddedViewModel(
             recentlyAddedObservable.post(musicUseCase.getRecentlyAdded())
         }
     }
+
+    fun getRecentlyAddedCount(): Int {
+        return recentlyAddedObservable.value?.size ?: 0
+    }
 }

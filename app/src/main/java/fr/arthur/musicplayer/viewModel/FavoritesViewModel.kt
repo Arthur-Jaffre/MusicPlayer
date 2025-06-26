@@ -25,4 +25,8 @@ class FavoritesViewModel(
         // mettre à jour la liste des favoris
         loadFavorites()
     }
+
+    fun getFavoritesCount(): Int {
+        return favoritesObservable.value?.size ?: 0
+    }
 }
