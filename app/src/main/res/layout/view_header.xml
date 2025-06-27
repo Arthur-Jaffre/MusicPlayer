@@ -3,6 +3,7 @@
     android:id="@+id/headerLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="16dp">
 
@@ -36,4 +37,12 @@
             android:textColor="@color/lightGray"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ic_more"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/default_margin"
+        android:src="@drawable/ic_menu_dots_vertical" />
 </LinearLayout>
