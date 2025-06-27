@@ -18,7 +18,7 @@ class MusicUseCase(
     suspend fun loadCachedMusics(): List<Music> {
         return musicRepository.loadCachedMusics()
     }
-    
+
     suspend fun getArtistsById(artistIds: List<String>): List<ArtistEntity> {
         return artistRepository.getArtistsById(artistIds)
     }
@@ -66,8 +66,8 @@ class MusicUseCase(
         )
 
         // TODO : supprimer les albums et artistes inutilisés
-//        albumRepository.deleteOrphanAlbums()
-//        artistRepository.deleteOrphanArtists()
+        albumRepository.deleteOrphanAlbums()
+        artistRepository.deleteOrphanArtists()
     }
 
     suspend fun getAllFavoritesMusics(): List<Music> {
