@@ -13,4 +13,8 @@ data class Music(
     val imageUri: String? = null,
     val isFavorite: Boolean = false,
     val addedAt: Long = System.currentTimeMillis()
-) : Serializable
+) : Serializable {
+    fun artistIdsAsString(separator: String = ", "): String {
+        return artistIds.joinToString(separator)
+    }
+}

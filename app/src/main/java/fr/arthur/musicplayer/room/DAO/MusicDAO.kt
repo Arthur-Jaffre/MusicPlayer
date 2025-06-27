@@ -14,9 +14,9 @@ import fr.arthur.musicplayer.room.entities.MusicWithArtists
 @Dao
 interface MusicDAO {
     @Transaction
-    @Query("SELECT * FROM music")
+    @Query("SELECT * FROM music ORDER BY title")
     suspend fun getAll(): List<MusicWithArtists>
-
+    
     @Transaction
     @Query("SELECT * FROM music WHERE albumId = :albumId")
     suspend fun getFromAlbum(albumId: String): List<MusicWithArtists>
@@ -47,4 +47,15 @@ interface MusicDAO {
     @Transaction
     @Query(" SELECT m.* FROM music AS m INNER JOIN MusicArtistCrossRef AS ma ON m.id = ma.musicId WHERE ma.artistId = :artistId")
     suspend fun getFromArtist(artistId: String): List<MusicWithArtists>
+
+
+    @Transaction
+    suspend fun updateMusicWithRelations(
+        music: MusicEntity,
+        newRefs: List<MusicArtistCrossRef>
+    ) {
+        deleteArtistCrossRefs(music.id)
+        insertAll(listOf(music))
+        insertArtistCrossRefs(newRefs)
+    }
 }

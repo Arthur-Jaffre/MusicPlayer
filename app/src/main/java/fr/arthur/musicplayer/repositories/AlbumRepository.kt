@@ -41,4 +41,8 @@ class AlbumRepository(
             )
         })
     }
+
+    override suspend fun deleteOrphanAlbums() {
+        albumDao.deleteOrphanAlbums()
+    }
 }

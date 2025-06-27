@@ -1,13 +1,15 @@
 package fr.arthur.musicplayer.repositories
 
+import androidx.room.Transaction
+import fr.arthur.musicplayer.helpers.AudioMetadataUpdater
 import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
 import fr.arthur.musicplayer.room.DAO.MusicDAO
 import fr.arthur.musicplayer.room.entities.MusicArtistCrossRef
-import fr.arthur.musicplayer.room.entities.MusicEntity
 
 class MusicRepository(
-    private val musicDao: MusicDAO
+    private val musicDao: MusicDAO,
+    private val audioMetadataUpdater: AudioMetadataUpdater
 ) : IMusicRepository {
 
     override suspend fun loadCachedMusics(): List<Music> {
@@ -39,25 +41,12 @@ class MusicRepository(
         return musicDao.getFromArtist(artistId).map { it.toDomain() }
     }
 
-    override suspend fun updateMusic(music: Music) {
-        musicDao.insertAll(
-            listOf(
-                MusicEntity(
-                    id = music.id,
-                    title = music.title,
-                    albumId = music.albumId,
-                    duration = music.duration,
-                    year = music.year,
-                    trackNumber = music.trackNumber,
-                    imageUri = music.imageUri,
-                    isFavorite = music.isFavorite,
-                    addedAt = music.addedAt
-                )
-            )
-        )
+    @Transaction
+    override suspend fun updateMusic(music: Music, albumName: String?) {
+        audioMetadataUpdater.updateAudioMetadata(music, albumName)
 
-        musicDao.deleteArtistCrossRefs(music.id)
-        musicDao.insertArtistCrossRefs(music.artistIds.map { MusicArtistCrossRef(music.id, it) })
+        val refs = music.artistIds.map { MusicArtistCrossRef(music.id, it) }
+        musicDao.updateMusicWithRelations(music.toEntity(), refs)
     }
 
 }

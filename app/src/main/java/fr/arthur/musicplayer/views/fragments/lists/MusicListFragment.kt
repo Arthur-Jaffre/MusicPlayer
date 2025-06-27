@@ -34,7 +34,7 @@ class MusicListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.musicsObservable.observe {
-            adapter.submitList(it)
+            adapter.submitList(it.toList()) // Une ptn de journée perdu pour cette ligne =)
         }
 
         refreshMusics()

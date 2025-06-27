@@ -123,7 +123,7 @@ class EditMusicActivity : AppCompatActivity() {
 
     private fun populateForm() {
         titleEdit.setText(currentMusic.title.orEmpty())
-        artistEdit.setText(currentMusic.artistIds.joinToString(", "))
+        artistEdit.setText(currentMusic.artistIdsAsString())
         yearEdit.setText(currentMusic.year?.toString().orEmpty())
         trackEdit.setText(currentMusic.trackNumber?.toString().orEmpty())
 
@@ -143,8 +143,12 @@ class EditMusicActivity : AppCompatActivity() {
                 imageUri = selectedImageUri?.toString() ?: currentMusic.imageUri
             )
 
+            // On suppose que la permission SAF persistante est déjà acquise,
+            // on écrit directement dans le fichier via VM
             musicViewModel.updateMusic(updatedMusic)
+
             Toast.makeText(this, R.string.updated_data, Toast.LENGTH_SHORT).show()
+
             finish()
         }
     }

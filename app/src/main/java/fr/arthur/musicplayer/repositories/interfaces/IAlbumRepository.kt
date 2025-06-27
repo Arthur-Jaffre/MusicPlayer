@@ -8,4 +8,5 @@ interface IAlbumRepository {
     suspend fun getAlbumById(albumId: String): Album
     suspend fun getAlbumsByName(name: String): List<Album>
     suspend fun addAlbum(album: Album)
+    suspend fun deleteOrphanAlbums()
 }

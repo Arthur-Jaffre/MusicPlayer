@@ -24,4 +24,8 @@ class ArtistRepository(
         artistDao.insert(artist)
         return artist
     }
+
+    override suspend fun deleteOrphanArtists() {
+        artistDao.deleteOrphanArtists()
+    }
 }

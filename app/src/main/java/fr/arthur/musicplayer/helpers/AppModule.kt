@@ -48,8 +48,9 @@ val appModule = module {
 
     single { FolderUriStore(get()) }
     single { MusicScanner(get(), get()) }
+    single { AudioMetadataUpdater(get()) }
 
-    single { MusicRepository(get()) }
+    single { MusicRepository(get(), get()) }
     single { AlbumRepository(get()) }
     single { ArtistRepository(get()) }
     single { PlaylistRepository(get()) }
@@ -67,11 +68,11 @@ val appModule = module {
     factory { AlbumUseCase(get()) }
     factory { ScannerUseCase(get()) }
 
-    factory { MusicListViewModel(get(), get()) }
-    factory { ArtistListViewModel(get()) }
-    factory { PlayListListViewModel(get()) }
-    factory { AlbumListViewModel(get()) }
-    factory { FavoritesViewModel(get()) }
-    factory { RecentlyAddedViewModel(get()) }
+    single { MusicListViewModel(get(), get()) }
+    single { ArtistListViewModel(get()) }
+    single { PlayListListViewModel(get()) }
+    single { AlbumListViewModel(get()) }
+    single { FavoritesViewModel(get()) }
+    single { RecentlyAddedViewModel(get()) }
 
 }
