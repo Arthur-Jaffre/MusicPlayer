@@ -61,7 +61,7 @@ val appModule = module {
     single<IPlaylistRepository> { get<PlaylistRepository>() }
     single<IScannerRepository> { get<ScannerRepository>() }
 
-    factory { MusicUseCase(get()) }
+    factory { MusicUseCase(get(), get(), get()) }
     factory { ArtistUseCase(get()) }
     factory { PlaylistUseCase(get()) }
     factory { AlbumUseCase(get()) }

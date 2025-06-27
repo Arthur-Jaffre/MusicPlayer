@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
 //    alias(libs.plugins.kotlin.kapt)
     id("org.jetbrains.kotlin.kapt")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -48,6 +47,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.glide)
+    implementation(libs.jaudiotagger)
 //    implementation(libs.androidx.room.common.jvm)
 //    implementation(libs.androidx.room.runtime)
 //    implementation(libs.androidx.room.compiler)

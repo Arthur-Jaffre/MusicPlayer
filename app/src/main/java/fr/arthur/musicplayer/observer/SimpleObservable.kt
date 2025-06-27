@@ -3,7 +3,6 @@ package fr.arthur.musicplayer.observer
 import android.os.Handler
 import android.os.Looper
 
-// presentation/observer/SimpleObservable.kt
 class SimpleObservable<T> {
     private val observers = mutableListOf<(T) -> Unit>()
     internal var value: T? = null

@@ -16,7 +16,7 @@ import kotlin.coroutines.suspendCoroutine
 class MusicScanner(private val context: Context, private val folderUriStore: FolderUriStore) {
 
     suspend fun scanAudioFilesSuspend(onMusicFound: (Music) -> Unit) =
-        suspendCoroutine<Unit> { cont ->
+        suspendCoroutine { cont ->
             this.scanAudioFiles(
                 onMusicFound = onMusicFound,
                 onComplete = { cont.resume(Unit) }

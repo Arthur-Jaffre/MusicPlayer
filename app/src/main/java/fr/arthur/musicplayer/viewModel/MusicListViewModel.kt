@@ -21,6 +21,12 @@ class MusicListViewModel(
         }
     }
 
+    fun updateMusic(music: Music) {
+        scope.launch {
+            musicUseCase.updateMusic(music)
+        }
+    }
+
     fun getMusicsByArtist(artist: Artist) {
         scope.launch {
             musicsObservable.post(musicUseCase.getMusicsByArtist(artist))

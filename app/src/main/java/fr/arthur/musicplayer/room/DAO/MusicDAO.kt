@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import fr.arthur.musicplayer.helpers.AppConstants.MAX_RECENTLY_ADDED
+import fr.arthur.musicplayer.room.entities.MusicArtistCrossRef
 import fr.arthur.musicplayer.room.entities.MusicEntity
 import fr.arthur.musicplayer.room.entities.MusicWithArtists
 
@@ -32,6 +33,12 @@ interface MusicDAO {
 
     @Query("UPDATE music SET isFavorite = :favorite WHERE id = :musicId")
     suspend fun updateFavorites(musicId: String, favorite: Int)
+
+    @Query("DELETE FROM MusicArtistCrossRef WHERE musicId = :musicId")
+    suspend fun deleteArtistCrossRefs(musicId: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertArtistCrossRefs(refs: List<MusicArtistCrossRef>)
 
     @Transaction
     @Query("SELECT * FROM music ORDER BY addedAt DESC LIMIT :maxMusics")
