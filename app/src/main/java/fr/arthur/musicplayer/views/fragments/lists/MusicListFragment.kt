@@ -9,12 +9,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.MusicAdapter
+import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
+import fr.arthur.musicplayer.views.navigation.navigateToArtistOverview
 import org.koin.android.ext.android.inject
 
 class MusicListFragment : Fragment() {
 
-    private val viewModel: MusicListViewModel by inject()
+    private val musicViewModel: MusicListViewModel by inject()
+    private val artistViewModel: ArtistListViewModel by inject()
     private lateinit var adapter: MusicAdapter
 
     override fun onCreateView(
@@ -26,15 +29,24 @@ class MusicListFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         adapter = MusicAdapter(
-            toFavorites = { music -> viewModel.toFavorites(music) },
-            isFavorite = false
+            toFavorites = { music -> musicViewModel.toFavorites(music) },
+            isFavorite = false,
+            onArtistClick = { artistId ->
+                artistViewModel.getArtistById(artistId)
+            }
         )
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.musicsObservable.observe {
+        musicViewModel.musicsObservable.observe {
             adapter.submitList(it.toList()) // Une ptn de journée perdu pour cette ligne =)
+        }
+
+        artistViewModel.artistEvent.observe(viewLifecycleOwner) { event ->
+            event.getIfNotHandled()?.let { artist ->
+                navigateToArtistOverview(artist)
+            }
         }
 
         refreshMusics()
@@ -42,7 +54,8 @@ class MusicListFragment : Fragment() {
         return view
     }
 
+
     fun refreshMusics() {
-        viewModel.loadMusics()
+        musicViewModel.loadMusics()
     }
 }

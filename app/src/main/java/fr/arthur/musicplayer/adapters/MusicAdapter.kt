@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import fr.arthur.musicplayer.views.activities.EditMusicActivity
 
 class MusicAdapter(
     private val toFavorites: ((Music) -> Unit)? = null,
+    private val onArtistClick: ((String) -> Unit)? = null,
     private val isFavorite: Boolean = false
 ) : ListAdapter<Music, MusicViewHolder>(MusicDiffCallback()) {
 
@@ -51,9 +53,14 @@ class MusicAdapter(
             dialog.dismiss()
         }
 
-        view.findViewById<Button>(R.id.btn_artist).setOnClickListener {
-            // Implémenter l'action Artiste
-            dialog.dismiss()
+        val btnArtist = view.findViewById<Button>(R.id.btn_artist)
+        if (onArtistClick == null) {
+            btnArtist.visibility = View.GONE
+        } else {
+            btnArtist.setOnClickListener {
+                onArtistClick(music.artistIds.first())
+                dialog.dismiss()
+            }
         }
 
         view.findViewById<Button>(R.id.btn_add_to_playlist).setOnClickListener {
@@ -62,6 +69,7 @@ class MusicAdapter(
         }
 
         view.findViewById<Button>(R.id.btn_edit_tags).setOnClickListener {
+            // TODO : vérifier que le fichier est bien du type mp3
             val intent = Intent(context, EditMusicActivity::class.java)
             intent.putExtra("music", music)
             context.startActivity(intent)

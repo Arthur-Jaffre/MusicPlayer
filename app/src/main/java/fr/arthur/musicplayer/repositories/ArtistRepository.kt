@@ -11,7 +11,7 @@ class ArtistRepository(
 
     override suspend fun getAllArtists(): List<Artist> {
         return artistDao.getAll().map {
-            Artist(id = it.id)
+            Artist(id = it.id, imageUri = it.imageUri)
         }.sortedBy { it.id }
     }
 
@@ -27,5 +27,11 @@ class ArtistRepository(
 
     override suspend fun deleteOrphanArtists() {
         artistDao.deleteOrphanArtists()
+    }
+
+    override suspend fun getArtistById(id: String): Artist {
+        return artistDao.getById(id).let {
+            Artist(id = it.id, imageUri = it.imageUri)
+        }
     }
 }

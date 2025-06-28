@@ -64,8 +64,7 @@ class MusicUseCase(
             ),
             album.name
         )
-
-        // TODO : supprimer les albums et artistes inutilisés
+        
         albumRepository.deleteOrphanAlbums()
         artistRepository.deleteOrphanArtists()
     }

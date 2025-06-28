@@ -102,7 +102,7 @@ class ArtistOverviewFragment : Fragment() {
         val musicRecyclerView = view.findViewById<RecyclerView>(R.id.music_recyclerView)
         musicAdapter = MusicAdapter(
             toFavorites = { music -> musicViewModel.toFavorites(music) },
-            isFavorite = false
+            isFavorite = false,
         )
         musicRecyclerView.adapter = musicAdapter
         musicRecyclerView.layoutManager = LinearLayoutManager(requireContext())

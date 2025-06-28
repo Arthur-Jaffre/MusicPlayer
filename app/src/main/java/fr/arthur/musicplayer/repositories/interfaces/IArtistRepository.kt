@@ -8,4 +8,5 @@ interface IArtistRepository {
     suspend fun getArtistsById(ids: List<String>): List<ArtistEntity>
     suspend fun insertArtist(id: String): ArtistEntity
     suspend fun deleteOrphanArtists()
+    suspend fun getArtistById(id: String): Artist
 }

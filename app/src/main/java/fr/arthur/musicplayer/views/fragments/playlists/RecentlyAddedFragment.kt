@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.MusicAdapter
+import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.RecentlyAddedViewModel
+import fr.arthur.musicplayer.views.navigation.navigateToArtistOverview
 import org.koin.android.ext.android.inject
 
 class RecentlyAddedFragment : Fragment() {
-    private val viewModel: RecentlyAddedViewModel by inject()
+    private val musicViewModel: RecentlyAddedViewModel by inject()
+    private val artistViewModel: ArtistListViewModel by inject()
     private lateinit var adapter: MusicAdapter
 
     override fun onCreateView(
@@ -28,25 +31,36 @@ class RecentlyAddedFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         adapter = MusicAdapter(
-            toFavorites = { music -> viewModel.toFavorites(music) },
-            isFavorite = false
+            toFavorites = { music -> musicViewModel.toFavorites(music) },
+            isFavorite = false,
+            onArtistClick = { artistId ->
+                artistViewModel.getArtistById(artistId)
+            }
         )
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.recentlyAddedObservable.observe { recent ->
+        musicViewModel.recentlyAddedObservable.observe { recent ->
             adapter.submitList(recent)
 
             view.findViewById<TextView>(R.id.subtitle).text =
                 getString(R.string.playlist_number_of_musics_count, recent.size)
+
+            view.findViewById<ImageView>(R.id.ic_modify).visibility = View.GONE
 
             if (recent.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_music_found, Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.loadRecentlyAdded()
+        musicViewModel.loadRecentlyAdded()
+
+        artistViewModel.artistEvent.observe(viewLifecycleOwner) { event ->
+            event.getIfNotHandled()?.let { artist ->
+                navigateToArtistOverview(artist)
+            }
+        }
 
         setupFragment(view)
 

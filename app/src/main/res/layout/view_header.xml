@@ -39,10 +39,10 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/ic_more"
+        android:id="@+id/ic_modify"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/default_margin"
-        android:src="@drawable/ic_menu_dots_vertical" />
+        android:src="@drawable/ic_modify" />
 </LinearLayout>

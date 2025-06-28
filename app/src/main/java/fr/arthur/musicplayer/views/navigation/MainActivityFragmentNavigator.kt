@@ -7,7 +7,7 @@ import fr.arthur.musicplayer.views.fragments.lists.ArtistListFragment
 import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
 import fr.arthur.musicplayer.views.fragments.lists.PlaylistListFragment
 
-class FragmentNavigator(private val activity: AppCompatActivity) {
+class MainActivityFragmentNavigator(private val activity: AppCompatActivity) {
 
     fun showHomeMusics() {
         activity.supportFragmentManager.beginTransaction()
@@ -34,4 +34,5 @@ class FragmentNavigator(private val activity: AppCompatActivity) {
                 .commit()
         }
     }
+
 }

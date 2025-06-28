@@ -26,4 +26,8 @@ interface ArtistDAO {
 
     @Query("SELECT * FROM artist WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<String>): List<ArtistEntity>
+
+    @Query("SELECT * FROM artist WHERE id = :id")
+    suspend fun getById(id: String): ArtistEntity
+
 }

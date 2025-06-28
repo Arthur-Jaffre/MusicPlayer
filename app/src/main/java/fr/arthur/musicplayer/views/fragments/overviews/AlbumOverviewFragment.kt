@@ -13,12 +13,15 @@ import com.bumptech.glide.Glide
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.models.Album
+import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
+import fr.arthur.musicplayer.views.navigation.navigateToArtistOverview
 import org.koin.android.ext.android.inject
 
 class AlbumOverviewFragment : Fragment() {
 
-    private val viewModel: MusicListViewModel by inject()
+    private val musicViewModel: MusicListViewModel by inject()
+    private val artistViewModel: ArtistListViewModel by inject()
     private lateinit var adapter: MusicAdapter
     private lateinit var album: Album
 
@@ -46,16 +49,25 @@ class AlbumOverviewFragment : Fragment() {
         album = extractAlbumFromArguments()
 
         adapter = MusicAdapter(
-            toFavorites = { music -> viewModel.toFavorites(music) }
+            toFavorites = { music -> musicViewModel.toFavorites(music) },
+            onArtistClick = { artistId ->
+                artistViewModel.getArtistById(artistId)
+            }
         )
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.musicsObservable.observe {
+        musicViewModel.musicsObservable.observe {
             adapter.submitList(it)
             view.findViewById<TextView>(R.id.subtitle).text =
                 getString(R.string.playlist_number_of_musics_count, it.size)
+        }
+
+        artistViewModel.artistEvent.observe(viewLifecycleOwner) { event ->
+            event.getIfNotHandled()?.let { artist ->
+                navigateToArtistOverview(artist)
+            }
         }
 
         getMusicsFromAlbum()
@@ -76,6 +88,6 @@ class AlbumOverviewFragment : Fragment() {
     }
 
     private fun getMusicsFromAlbum() {
-        viewModel.getMusicsByAlbum(album)
+        musicViewModel.getMusicsByAlbum(album)
     }
 }

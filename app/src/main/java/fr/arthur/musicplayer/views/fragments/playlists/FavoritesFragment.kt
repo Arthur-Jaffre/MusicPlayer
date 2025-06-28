@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.MusicAdapter
+import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.FavoritesViewModel
+import fr.arthur.musicplayer.views.navigation.navigateToArtistOverview
 import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment() {
-    private val viewModel: FavoritesViewModel by inject()
+    private val musicViewModel: FavoritesViewModel by inject()
+    private val artistViewModel: ArtistListViewModel by inject()
     private lateinit var adapter: MusicAdapter
 
     override fun onCreateView(
@@ -29,27 +32,38 @@ class FavoritesFragment : Fragment() {
 
         adapter = MusicAdapter(
             toFavorites = { music ->
-                viewModel.toFavorites(music)
-                viewModel.loadFavorites() // mettre à jour la liste des favoris
+                musicViewModel.toFavorites(music)
+                musicViewModel.loadFavorites() // mettre à jour la liste des favoris
             },
-            isFavorite = true
+            isFavorite = true,
+            onArtistClick = { artistId ->
+                artistViewModel.getArtistById(artistId)
+            }
         )
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.favoritesObservable.observe { favorites ->
+        musicViewModel.favoritesObservable.observe { favorites ->
             adapter.submitList(favorites)
 
             view.findViewById<TextView>(R.id.subtitle).text =
                 getString(R.string.playlist_number_of_musics_count, favorites.size)
+
+            view.findViewById<ImageView>(R.id.ic_modify).visibility = View.GONE
 
             if (favorites.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_music_found, Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.loadFavorites()
+        musicViewModel.loadFavorites()
+
+        artistViewModel.artistEvent.observe(viewLifecycleOwner) { event ->
+            event.getIfNotHandled()?.let { artist ->
+                navigateToArtistOverview(artist)
+            }
+        }
 
         setupFragment(view)
 
