@@ -1,4 +1,4 @@
-package fr.arthur.musicplayer.views
+package fr.arthur.musicplayer.views.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,25 +9,25 @@ import fr.arthur.musicplayer.helpers.PermissionHandler
 import fr.arthur.musicplayer.helpers.StorageDialog
 import fr.arthur.musicplayer.helpers.appModule
 import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
-import fr.arthur.musicplayer.views.navigation.FragmentNavigator
+import fr.arthur.musicplayer.views.navigation.MainActivityFragmentNavigator
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var folderUriStore: FolderUriStore
     private lateinit var permissionHandler: PermissionHandler
-    private lateinit var fragmentNavigator: FragmentNavigator
+    private lateinit var mainActivityFragmentNavigator: MainActivityFragmentNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        startKoin { androidContext(this@MainActivity); modules(appModule) }
+        GlobalContext.startKoin { androidContext(this@MainActivity); modules(appModule) }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         folderUriStore = FolderUriStore(this)
         permissionHandler = PermissionHandler(this, folderUriStore) { refreshMusics() }
-        fragmentNavigator = FragmentNavigator(this)
+        mainActivityFragmentNavigator = MainActivityFragmentNavigator(this)
 
         if (!permissionHandler.hasAudioPermission()) {
             permissionHandler.requestAudioPermission()
@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
             handleFolderAccess()
         }
 
-        fragmentNavigator.showHomeMusics()
-        fragmentNavigator.setup()
+        mainActivityFragmentNavigator.showHomeMusics()
+        mainActivityFragmentNavigator.setup()
 
         //DatabaseExporter.exportDatabaseWithWAL(this)
     }

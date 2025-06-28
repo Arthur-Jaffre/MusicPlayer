@@ -10,6 +10,13 @@ class AlbumListViewModel(
     private val albumUseCase: AlbumUseCase
 ) : BaseListViewModel() {
     val albumsObservable = SimpleObservable<List<Album>>()
+    val albumObservable = SimpleObservable<Album>()
+
+    fun getAlbumById(id: String) {
+        scope.launch {
+            albumObservable.post(albumUseCase.getAlbumById(id))
+        }
+    }
 
     fun getAlbumsByArtist(artist: Artist) {
         scope.launch {

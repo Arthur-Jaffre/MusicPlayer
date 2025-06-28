@@ -1,12 +1,15 @@
 package fr.arthur.musicplayer.views.fragments.overviews
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,13 +19,16 @@ import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.models.Album
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.viewModel.AlbumListViewModel
+import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
+import fr.arthur.musicplayer.views.activities.EditArtistActivity
 import org.koin.android.ext.android.inject
 
 class ArtistOverviewFragment : Fragment() {
 
     private val musicViewModel: MusicListViewModel by inject()
     private val albumViewModel: AlbumListViewModel by inject()
+    private val artistViewModel: ArtistListViewModel by inject()
 
     private lateinit var artist: Artist
     private lateinit var musicAdapter: MusicAdapter
@@ -52,6 +58,7 @@ class ArtistOverviewFragment : Fragment() {
 
         observeAlbums()
         observeMusics(view)
+        observeArtists(view, viewLifecycleOwner)
 
         loadAlbums()
         loadMusics()
@@ -72,6 +79,13 @@ class ArtistOverviewFragment : Fragment() {
             .placeholder(R.drawable.ic_default_artist)
             .error(R.drawable.ic_default_artist)
             .into(imageView)
+
+        view.findViewById<ImageView>(R.id.ic_modify).setOnClickListener {
+            // ouvrir la page de modification artiste
+            val intent = Intent(requireContext(), EditArtistActivity::class.java)
+            intent.putExtra("artist", artist)
+            requireContext().startActivity(intent)
+        }
     }
 
     private fun setupAlbumRecyclerView(view: View) {
@@ -102,7 +116,7 @@ class ArtistOverviewFragment : Fragment() {
         val musicRecyclerView = view.findViewById<RecyclerView>(R.id.music_recyclerView)
         musicAdapter = MusicAdapter(
             toFavorites = { music -> musicViewModel.toFavorites(music) },
-            isFavorite = false
+            isFavorite = false,
         )
         musicRecyclerView.adapter = musicAdapter
         musicRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -119,6 +133,18 @@ class ArtistOverviewFragment : Fragment() {
             musicAdapter.submitList(it)
             view.findViewById<TextView>(R.id.subtitle).text =
                 getString(R.string.playlist_number_of_musics_count, it.size)
+        }
+    }
+
+
+    private fun observeArtists(view: View, lifecycleOwner: LifecycleOwner) {
+        artistViewModel.artistEvent.observe(lifecycleOwner) { event ->
+            val artist: Artist = event.getIfNotHandled() ?: return@observe
+            view.findViewById<TextView>(R.id.title).text = artist.id
+            if (artist.imageUri != null) {
+                view.findViewById<ImageView>(R.id.icon).setImageURI(artist.imageUri.toUri())
+            }
+            musicViewModel.getMusicsByArtist(artist)
         }
     }
 
