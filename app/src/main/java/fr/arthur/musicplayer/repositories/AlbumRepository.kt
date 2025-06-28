@@ -45,4 +45,14 @@ class AlbumRepository(
     override suspend fun deleteOrphanAlbums() {
         albumDao.deleteOrphanAlbums()
     }
+
+    override suspend fun updateAlbum(album: Album) {
+        albumDao.update(album.let { album ->
+            AlbumEntity(
+                id = album.id,
+                name = album.name,
+                artistId = album.artistId
+            )
+        })
+    }
 }

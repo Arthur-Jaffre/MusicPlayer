@@ -23,8 +23,8 @@ class MusicUseCase(
         return artistRepository.getArtistsById(artistIds)
     }
 
-    suspend fun insertArtist(artistIds: List<String>): List<ArtistEntity> {
-        return artistIds.map { artistRepository.insertArtist(it) }
+    suspend fun insertArtist(artistIds: List<ArtistEntity>): List<ArtistEntity> {
+        return artistIds.map { artistRepository.insertArtist(it.id, it.imageUri) }
     }
 
     suspend fun getAlbumsByName(albumName: String): List<Album> {
@@ -43,10 +43,20 @@ class MusicUseCase(
     }
 
     suspend fun updateMusic(music: Music) {
-        val existingArtists = getArtistsById(music.artistIds)
-        val missingIds = music.artistIds.filter { it !in existingArtists.map { it.id } }
-        val createdArtists = insertArtist(missingIds)
-        val allArtists = existingArtists + createdArtists
+        val existingArtists =
+            getArtistsById(music.artistIds) // récupère les artistes existants liés à la musique
+        val missingIds =
+            music.artistIds.filter { it !in existingArtists.map { it.id } } // identifie les IDs absents (non dans la base)
+        val createdArtists = insertArtist(
+            missingIds.map { id ->
+                ArtistEntity(
+                    id = id,
+                    imageUri = null
+                )
+            } // Crée et insère en base les artistes manquants
+        )
+        val allArtists =
+            existingArtists + createdArtists // fusionne les artistes existants et nouvellement créés
 
         val matchingAlbums = getAlbumsByName(music.albumId)
             .filter { album -> allArtists.any { it.id == album.artistId } }
@@ -64,7 +74,7 @@ class MusicUseCase(
             ),
             album.name
         )
-        
+
         albumRepository.deleteOrphanAlbums()
         artistRepository.deleteOrphanArtists()
     }

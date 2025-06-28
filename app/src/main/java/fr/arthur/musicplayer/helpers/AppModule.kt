@@ -63,7 +63,7 @@ val appModule = module {
     single<IScannerRepository> { get<ScannerRepository>() }
 
     factory { MusicUseCase(get(), get(), get()) }
-    factory { ArtistUseCase(get()) }
+    factory { ArtistUseCase(get(), get(), get()) }
     factory { PlaylistUseCase(get()) }
     factory { AlbumUseCase(get()) }
     factory { ScannerUseCase(get()) }

@@ -13,7 +13,7 @@ class MusicRepository(
 ) : IMusicRepository {
 
     override suspend fun loadCachedMusics(): List<Music> {
-        return musicDao.getAll().map { it.toDomain() }
+        return musicDao.getAll().map { it.toDomain() }.sortedBy { it.artistIds.first() }
     }
 
     override suspend fun getMusicsFromAlbum(albumId: String): List<Music> {
@@ -21,12 +21,13 @@ class MusicRepository(
             compareBy(
                 { it.trackNumber == null }, // met les non-null
                 { it.trackNumber ?: Int.MAX_VALUE },  // tri par trackNumber si non null
-                { it.title }                          // tri par titre ensuite
+                { it.artistIds.first() } // tri par artiste ensuite
             ))
     }
 
     override suspend fun getAllFavoritesMusics(): List<Music> {
         return musicDao.getAllFavoritesMusics().map { it.toDomain() }
+            .sortedBy { it.artistIds.first() }
     }
 
     override suspend fun updateFavorites(music: Music) {
@@ -34,11 +35,12 @@ class MusicRepository(
     }
 
     override suspend fun getRecentlyAdded(): List<Music> {
-        return musicDao.getRecentlyAdded().map { it.toDomain() }
+        return musicDao.getRecentlyAdded().map { it.toDomain() }.sortedBy { it.artistIds.first() }
     }
 
     override suspend fun getMusicsByArtist(artistId: String): List<Music> {
         return musicDao.getFromArtist(artistId).map { it.toDomain() }
+            .sortedBy { it.artistIds.first() }
     }
 
     @Transaction

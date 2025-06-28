@@ -14,9 +14,9 @@ import fr.arthur.musicplayer.room.entities.MusicWithArtists
 @Dao
 interface MusicDAO {
     @Transaction
-    @Query("SELECT * FROM music ORDER BY title")
+    @Query("SELECT * FROM music") // ORDER BY title
     suspend fun getAll(): List<MusicWithArtists>
-    
+
     @Transaction
     @Query("SELECT * FROM music WHERE albumId = :albumId")
     suspend fun getFromAlbum(albumId: String): List<MusicWithArtists>

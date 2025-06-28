@@ -13,6 +13,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="@dimen/default_margin"
         android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_foreground" />
 
     <LinearLayout

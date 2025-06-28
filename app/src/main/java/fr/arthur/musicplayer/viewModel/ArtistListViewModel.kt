@@ -6,6 +6,7 @@ import fr.arthur.musicplayer.helpers.Event
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.observer.SimpleObservable
 import fr.arthur.musicplayer.usecase.ArtistUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ArtistListViewModel(
@@ -17,8 +18,15 @@ class ArtistListViewModel(
 
     fun loadArtists() {
         scope.launch {
-            val data = artistUseCase.execute()
+            val data = artistUseCase.loadArtists()
             artistsObservable.post(data)
+        }
+    }
+
+    fun updateArtist(updatedArtist: Artist, lastName: String) {
+        scope.launch(Dispatchers.IO) {
+            artistUseCase.updateArtist(updatedArtist, lastName)
+            _artistEvent.postValue(Event(artistUseCase.getArtistById(updatedArtist.id)))
         }
     }
 

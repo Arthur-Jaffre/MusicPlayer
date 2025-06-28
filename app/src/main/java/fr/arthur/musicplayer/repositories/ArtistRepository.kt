@@ -19,8 +19,8 @@ class ArtistRepository(
         return artistDao.getByIds(ids)
     }
 
-    override suspend fun insertArtist(id: String): ArtistEntity {
-        val artist = ArtistEntity(id = id)
+    override suspend fun insertArtist(id: String, imageUri: String?): ArtistEntity {
+        val artist = ArtistEntity(id = id, imageUri = imageUri)
         artistDao.insert(artist)
         return artist
     }
@@ -33,5 +33,17 @@ class ArtistRepository(
         return artistDao.getById(id).let {
             Artist(id = it.id, imageUri = it.imageUri)
         }
+    }
+
+    override suspend fun deleteArtistById(id: String) {
+        artistDao.deleteById(id)
+    }
+
+    override suspend fun getAllArtistIds(): List<String> {
+        return artistDao.getAllArtistIds()
+    }
+
+    override suspend fun updateArtist(artist: Artist) {
+        artistDao.update(ArtistEntity(id = artist.id, imageUri = artist.imageUri))
     }
 }
