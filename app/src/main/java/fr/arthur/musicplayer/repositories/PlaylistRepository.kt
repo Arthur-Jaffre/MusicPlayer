@@ -3,6 +3,8 @@ package fr.arthur.musicplayer.repositories
 import fr.arthur.musicplayer.models.Playlist
 import fr.arthur.musicplayer.repositories.interfaces.IPlaylistRepository
 import fr.arthur.musicplayer.room.DAO.PlaylistDAO
+import fr.arthur.musicplayer.room.entities.PlaylistEntity
+import fr.arthur.musicplayer.room.entities.PlaylistMusicCrossRef
 
 class PlaylistRepository(
     private val playlistDao: PlaylistDAO
@@ -12,5 +14,25 @@ class PlaylistRepository(
         return playlistDao.getAll().map {
             Playlist(id = it.id, name = it.name, numberOfMusics = it.numberOfMusics)
         }
+    }
+
+    override suspend fun addPlaylist(playlist: Playlist) {
+        playlistDao.insert(
+            PlaylistEntity(
+                id = playlist.id,
+                name = playlist.name!!,
+                numberOfMusics = playlist.numberOfMusics
+            )
+        )
+    }
+
+    override suspend fun insertMusic(playlistId: String, musicId: String) {
+        playlistDao.insertMusic(
+            PlaylistMusicCrossRef(
+                playlistId = playlistId,
+                musicId = musicId
+            )
+        )
+
     }
 }

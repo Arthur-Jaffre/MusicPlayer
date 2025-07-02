@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.PlayListPopupAdapter
+import fr.arthur.musicplayer.models.Playlist
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import java.util.UUID
 
 class PlayListDialog(
+    private val musicId: String,
     context: Context,
     private val playlistViewModel: PlayListListViewModel
 ) : Dialog(context) {
@@ -27,13 +30,29 @@ class PlayListDialog(
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.dialog_playlist_options)
 
+        setupComponents()
+        setupRecyclerView()
+
         playlistViewModel.playlistObservable.observe {
             adapter.submitList(it)
         }
 
-        setupComponents()
-        setupRecyclerView()
         loadPlaylists()
+        setupButton()
+    }
+
+    private fun setupButton() {
+        addButton = findViewById(R.id.button_validate)
+        addButton.setOnClickListener {
+            val playlistName = entryText.text.toString()
+            if (playlistName.isNotBlank()) {
+                val id = UUID.randomUUID().toString()
+                val playlist = Playlist(id, name = playlistName)
+                playlistViewModel.addPlaylist(playlist)
+                playlistViewModel.insertMusic(id, musicId)
+                dismiss()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -45,7 +64,6 @@ class PlayListDialog(
 
     private fun setupComponents() {
         entryText = findViewById(R.id.edit_text_input)
-        addButton = findViewById(R.id.button_validate)
     }
 
     private fun loadPlaylists() {

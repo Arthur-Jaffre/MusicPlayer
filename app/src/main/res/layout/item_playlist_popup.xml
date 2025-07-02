@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp">
+    android:paddingHorizontal="5dp"
+    android:paddingVertical="0dp">
 
     <TextView
         android:id="@+id/playlist_title"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
     <RadioButton
         android:id="@+id/check"

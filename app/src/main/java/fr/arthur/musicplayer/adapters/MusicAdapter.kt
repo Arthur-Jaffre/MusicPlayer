@@ -1,26 +1,17 @@
 package fr.arthur.musicplayer.adapters
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.MusicViewHolder
 import fr.arthur.musicplayer.models.Music
-import fr.arthur.musicplayer.views.activities.EditMusicActivity
 
 class MusicAdapter(
-    private val toFavorites: ((Music) -> Unit)? = null,
-    private val onArtistClick: ((String) -> Unit)? = null,
-    private val isFavorite: Boolean = false,
-    private val onPlaylist: ((Music) -> Unit)? = null,
+    private val onShowOptions: (Context, Music) -> Unit
 ) : ListAdapter<Music, MusicViewHolder>(MusicDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -31,53 +22,9 @@ class MusicAdapter(
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         val music = getItem(position)
         holder.bind(music)
-
         holder.itemView.findViewById<ImageView>(R.id.icon_more).setOnClickListener {
-            showOptionsPopup(it.context, music)
+            onShowOptions(it.context, music)
         }
-    }
-
-    private fun showOptionsPopup(context: Context, music: Music) {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_music_options, null)
-        val dialog = AlertDialog.Builder(context).setView(view).create()
-
-        val favoriteBtn = view.findViewById<Button>(R.id.btn_favoris)
-        if (isFavorite) favoriteBtn.text = context.getString(R.string.remove_from_favoris)
-        favoriteBtn.setOnClickListener {
-            toFavorites?.invoke(music.copy(isFavorite = !isFavorite))
-            Toast.makeText(context, R.string.updated_data, Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-        }
-
-        view.findViewById<Button>(R.id.btn_play_next).setOnClickListener {
-            // Implémenter l'action Lire juste après
-            dialog.dismiss()
-        }
-
-        val btnArtist = view.findViewById<Button>(R.id.btn_artist)
-        if (onArtistClick == null) {
-            btnArtist.visibility = View.GONE
-        } else {
-            btnArtist.setOnClickListener {
-                onArtistClick(music.artistIds.first())
-                dialog.dismiss()
-            }
-        }
-
-        view.findViewById<Button>(R.id.btn_add_to_playlist).setOnClickListener {
-            // Ajouter à la playlist
-            dialog.dismiss()
-        }
-
-        view.findViewById<Button>(R.id.btn_edit_tags).setOnClickListener {
-            // TODO : vérifier que le fichier est bien du type mp3
-            val intent = Intent(context, EditMusicActivity::class.java)
-            intent.putExtra("music", music)
-            context.startActivity(intent)
-            dialog.dismiss()
-        }
-
-        dialog.show()
     }
 
     private class MusicDiffCallback : DiffUtil.ItemCallback<Music>() {
