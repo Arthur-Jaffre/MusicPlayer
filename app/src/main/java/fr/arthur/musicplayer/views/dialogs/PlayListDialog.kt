@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
@@ -58,7 +59,20 @@ class PlayListDialog(
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = PlayListPopupAdapter()
+        adapter = PlayListPopupAdapter(
+            onPlaylistChecked = { playlist ->
+                playlistViewModel.insertMusic(
+                    playlist.id,
+                    musicId
+                )
+                this@PlayListDialog.dismiss()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.added_to_playlist, playlist.name),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
         recyclerView.adapter = adapter
     }
 

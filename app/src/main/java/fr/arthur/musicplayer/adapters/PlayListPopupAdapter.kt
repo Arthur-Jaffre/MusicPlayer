@@ -8,7 +8,9 @@ import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.PlaylistPopupViewHolder
 import fr.arthur.musicplayer.models.Playlist
 
-class PlayListPopupAdapter : RecyclerView.Adapter<PlaylistPopupViewHolder>() {
+class PlayListPopupAdapter(
+    private val onPlaylistChecked: (Playlist) -> Unit
+) : RecyclerView.Adapter<PlaylistPopupViewHolder>() {
     private val items = mutableListOf<Playlist>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -24,7 +26,7 @@ class PlayListPopupAdapter : RecyclerView.Adapter<PlaylistPopupViewHolder>() {
     ): PlaylistPopupViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_playlist_popup, parent, false)
-        return PlaylistPopupViewHolder(view, parent.context)
+        return PlaylistPopupViewHolder(view, parent.context, onPlaylistChecked)
     }
 
     override fun onBindViewHolder(holder: PlaylistPopupViewHolder, position: Int) {
