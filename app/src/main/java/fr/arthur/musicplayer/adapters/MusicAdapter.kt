@@ -19,7 +19,8 @@ import fr.arthur.musicplayer.views.activities.EditMusicActivity
 class MusicAdapter(
     private val toFavorites: ((Music) -> Unit)? = null,
     private val onArtistClick: ((String) -> Unit)? = null,
-    private val isFavorite: Boolean = false
+    private val isFavorite: Boolean = false,
+    private val onPlaylist: ((Music) -> Unit)? = null,
 ) : ListAdapter<Music, MusicViewHolder>(MusicDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -64,7 +65,7 @@ class MusicAdapter(
         }
 
         view.findViewById<Button>(R.id.btn_add_to_playlist).setOnClickListener {
-            // Implémenter Ajouter à la playlist
+            // Ajouter à la playlist
             dialog.dismiss()
         }
 
