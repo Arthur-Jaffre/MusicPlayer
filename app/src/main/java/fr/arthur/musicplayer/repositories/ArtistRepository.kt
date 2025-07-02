@@ -29,8 +29,8 @@ class ArtistRepository(
         artistDao.deleteOrphanArtists()
     }
 
-    override suspend fun getArtistById(id: String): Artist {
-        return artistDao.getById(id).let {
+    override suspend fun getArtistById(id: String): Artist? {
+        return artistDao.getById(id)?.let {
             Artist(id = it.id, imageUri = it.imageUri)
         }
     }

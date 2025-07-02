@@ -30,7 +30,7 @@ interface ArtistDAO {
     suspend fun getByIds(ids: List<String>): List<ArtistEntity>
 
     @Query("SELECT * FROM artist WHERE id = :id")
-    suspend fun getById(id: String): ArtistEntity
+    suspend fun getById(id: String): ArtistEntity?
 
     @Query("DELETE FROM artist WHERE id = :id")
     suspend fun deleteById(id: String)

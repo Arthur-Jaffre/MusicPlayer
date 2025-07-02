@@ -11,24 +11,31 @@ class AlbumRepository(
 
     override suspend fun getAllAlbums(): List<Album> {
         return albumDao.getAll().map {
-            Album(id = it.id, name = it.name, artistId = it.artistId)
+            Album(id = it.id, name = it.name, artistId = it.artistId, imageUri = it.imageUri)
         }
     }
 
     override suspend fun getAlbumsByArtist(artistId: String): List<Album> {
         return albumDao.getFromArtist(artistId).map {
-            Album(id = it.id, name = it.name, artistId = it.artistId)
+            Album(id = it.id, name = it.name, artistId = it.artistId, imageUri = it.imageUri)
         }
     }
 
     override suspend fun getAlbumById(albumId: String): Album {
         return albumDao.getById(albumId)
-            .let { album -> Album(id = album.id, name = album.name, artistId = album.artistId) }
+            .let { album ->
+                Album(
+                    id = album.id,
+                    name = album.name,
+                    artistId = album.artistId,
+                    imageUri = album.imageUri
+                )
+            }
     }
 
     override suspend fun getAlbumsByName(name: String): List<Album> {
         return albumDao.getByName(name).map {
-            Album(id = it.id, name = it.name, artistId = it.artistId)
+            Album(id = it.id, name = it.name, artistId = it.artistId, imageUri = it.imageUri)
         }
     }
 
@@ -37,7 +44,8 @@ class AlbumRepository(
             AlbumEntity(
                 id = album.id,
                 name = album.name,
-                artistId = album.artistId
+                artistId = album.artistId,
+                imageUri = album.imageUri
             )
         })
     }
@@ -51,7 +59,8 @@ class AlbumRepository(
             AlbumEntity(
                 id = album.id,
                 name = album.name,
-                artistId = album.artistId
+                artistId = album.artistId,
+                imageUri = album.imageUri
             )
         })
     }

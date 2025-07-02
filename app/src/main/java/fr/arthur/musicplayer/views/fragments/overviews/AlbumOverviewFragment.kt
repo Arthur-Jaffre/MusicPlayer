@@ -1,5 +1,6 @@
 package fr.arthur.musicplayer.views.fragments.overviews
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +14,10 @@ import com.bumptech.glide.Glide
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.models.Album
+import fr.arthur.musicplayer.viewModel.AlbumListViewModel
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
+import fr.arthur.musicplayer.views.activities.EditAlbumActivity
 import fr.arthur.musicplayer.views.navigation.navigateToArtistOverview
 import org.koin.android.ext.android.inject
 
@@ -22,6 +25,7 @@ class AlbumOverviewFragment : Fragment() {
 
     private val musicViewModel: MusicListViewModel by inject()
     private val artistViewModel: ArtistListViewModel by inject()
+    private val albumViewModel: AlbumListViewModel by inject()
     private lateinit var adapter: MusicAdapter
     private lateinit var album: Album
 
@@ -70,6 +74,16 @@ class AlbumOverviewFragment : Fragment() {
             }
         }
 
+        albumViewModel.albumObservable.observe {
+            view.findViewById<TextView>(R.id.title).text = it.name
+            album = it
+            Glide.with(this)
+                .load(it.imageUri)
+                .placeholder(R.drawable.ic_default_artist)
+                .error(R.drawable.ic_default_album)
+                .into(view.findViewById(R.id.icon))
+        }
+
         getMusicsFromAlbum()
         setupToolbar(view)
 
@@ -85,6 +99,14 @@ class AlbumOverviewFragment : Fragment() {
             .placeholder(R.drawable.ic_default_artist)
             .error(R.drawable.ic_default_album)
             .into(imageView)
+
+
+        view.findViewById<ImageView>(R.id.ic_modify).setOnClickListener {
+            // ouvrir la page de modification artiste
+            val intent = Intent(requireContext(), EditAlbumActivity::class.java)
+            intent.putExtra("album", album)
+            requireContext().startActivity(intent)
+        }
     }
 
     private fun getMusicsFromAlbum() {

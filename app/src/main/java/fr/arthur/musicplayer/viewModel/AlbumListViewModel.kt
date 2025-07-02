@@ -18,6 +18,13 @@ class AlbumListViewModel(
         }
     }
 
+    fun updateAlbum(album: Album, oldArtist: String) {
+        scope.launch {
+            albumUseCase.updateAlbum(album, oldArtist)
+            albumObservable.post(albumUseCase.getAlbumById(album.id))
+        }
+    }
+
     fun getAlbumsByArtist(artist: Artist) {
         scope.launch {
             albumsObservable.post(albumUseCase.getAlbumsByArtist(artist.id))

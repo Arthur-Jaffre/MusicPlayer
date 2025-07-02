@@ -65,7 +65,7 @@ val appModule = module {
     factory { MusicUseCase(get(), get(), get()) }
     factory { ArtistUseCase(get(), get(), get()) }
     factory { PlaylistUseCase(get()) }
-    factory { AlbumUseCase(get()) }
+    factory { AlbumUseCase(get(), get(), get()) }
     factory { ScannerUseCase(get()) }
 
     single { MusicListViewModel(get(), get()) }

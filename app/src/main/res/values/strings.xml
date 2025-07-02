@@ -37,6 +37,7 @@
     <string name="add_to_favoris">Ajouter aux favoris</string>
     <string name="remove_from_favoris">Retirer des favoris</string>
     <string name="updated_data">Musique modifiée</string>
+    <string name="updated_album_data">Album modifié</string>
     <string name="updated_artist_data">Artiste modifié</string>
     <string name="playlist_number_of_musics_count">Nombre de musiques : %d</string>
     <string name="other_default_title">Titre</string>

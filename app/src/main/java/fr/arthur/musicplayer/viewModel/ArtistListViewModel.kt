@@ -26,13 +26,13 @@ class ArtistListViewModel(
     fun updateArtist(updatedArtist: Artist, lastName: String) {
         scope.launch(Dispatchers.IO) {
             artistUseCase.updateArtist(updatedArtist, lastName)
-            _artistEvent.postValue(Event(artistUseCase.getArtistById(updatedArtist.id)))
+            _artistEvent.postValue(Event(artistUseCase.getArtistById(updatedArtist.id)!!))
         }
     }
 
     fun getArtistById(id: String) {
         scope.launch {
-            _artistEvent.postValue(Event(artistUseCase.getArtistById(id)))
+            _artistEvent.postValue(Event(artistUseCase.getArtistById(id)!!))
         }
     }
 }
