@@ -2,6 +2,7 @@ package fr.arthur.musicplayer.helpers
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
+import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import fr.arthur.musicplayer.helpers.AppConstants.UNKNOWN_ITEM
 import fr.arthur.musicplayer.models.Music
@@ -9,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -16,7 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 class MusicScanner(private val context: Context, private val folderUriStore: FolderUriStore) {
 
     suspend fun scanAudioFilesSuspend(onMusicFound: (Music) -> Unit) =
-        suspendCoroutine<Unit> { cont ->
+        suspendCoroutine { cont ->
             this.scanAudioFiles(
                 onMusicFound = onMusicFound,
                 onComplete = { cont.resume(Unit) }
@@ -83,6 +85,15 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER)
                                 ?.toIntOrNull()
 
+                        val pictureData = mmr.embeddedPicture
+                        val imageUri = pictureData?.let {
+                            val fileName = "cover_${System.currentTimeMillis()}.jpg"
+                            val coverFile = File(context.cacheDir, fileName)
+                            coverFile.writeBytes(it)
+                            Uri.fromFile(coverFile)
+                        }?.toString()
+
+
                         val music = Music(
                             id = file.uri.toString(),
                             title = title,
@@ -91,6 +102,7 @@ class MusicScanner(private val context: Context, private val folderUriStore: Fol
                             trackNumber = trackNumber,
                             artistIds = artistIds,
                             albumId = albumName,
+                            imageUri = imageUri
                         )
 
                         withContext(Dispatchers.Main) {

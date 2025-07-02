@@ -16,6 +16,8 @@ roomCommonJvm = "2.7.2"
 roomRuntime = "2.7.2"
 roomCompiler = "2.7.2"
 orgJetbrainsKotlinKaptGradlePlugin = "2.2.0"
+jaudiotagger = "2.0.1"
+mp3agic = "0.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +34,8 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+jaudiotagger = { group = "org.jaudiotagger", name = "jaudiotagger", version.ref = "jaudiotagger" }
+mp3agic = { group = "com.mpatric", name = "mp3agic", version.ref = "mp3agic" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

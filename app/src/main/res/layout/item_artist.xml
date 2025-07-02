@@ -20,7 +20,8 @@
             android:layout_height="80dp"
             android:layout_marginTop="7dp"
             android:contentDescription="@string/description_artist_cart"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_default_artist" />
 
         <TextView
             android:id="@+id/textArtistName"
