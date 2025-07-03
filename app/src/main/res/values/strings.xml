@@ -49,4 +49,5 @@
     <string name="title_rename_playlist">Renommer</string>
     <string name="edit_rename_playlist">Nouveau nom</string>
     <string name="validate_btn_rename_playlist">Valider</string>
+    <string name="search_bar_text">Rechercher</string>
 </resources>

@@ -11,6 +11,7 @@ class ArtistUseCase(
     private val musicRepository: IMusicRepository,
     private val albumRepository: IAlbumRepository
 ) {
+    suspend fun getAllArtists() = artistRepository.getAllArtists()
     suspend fun loadArtists(): List<Artist> = artistRepository.getAllArtists()
     suspend fun getArtistById(id: String) = artistRepository.getArtistById(id)
     suspend fun getMusicsByArtistId(id: String) = musicRepository.getMusicsByArtist(id)
