@@ -15,7 +15,7 @@ import fr.arthur.musicplayer.room.entities.PlaylistEntity
 import fr.arthur.musicplayer.room.entities.PlaylistMusicCrossRef
 
 @Database(
-    version = 6,
+    version = 7,
     entities = [
         MusicEntity::class,
         ArtistEntity::class,
