@@ -24,9 +24,16 @@ class PlayListListViewModel(
         }
     }
 
-    fun insertMusic(playlistId: String, musicId: String) {
+    fun insertMusic(playlist: Playlist, musicId: String) {
         scope.launch {
-            playlistUseCase.insertMusic(playlistId, musicId)
+            playlistUseCase.insertMusic(playlist, musicId)
         }
+    }
+
+    fun updatePlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCase.updatePlaylist(playlist)
+        }
+
     }
 }

@@ -8,7 +8,11 @@ import androidx.room.Index
     tableName = "playlist_music_cross_ref",
     primaryKeys = ["playlistId", "musicId"],
     foreignKeys = [
-        ForeignKey(entity = PlaylistEntity::class, parentColumns = ["id"], childColumns = ["playlistId"]),
+        ForeignKey(
+            entity = PlaylistEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["playlistId"]
+        ),
         ForeignKey(entity = MusicEntity::class, parentColumns = ["id"], childColumns = ["musicId"])
     ],
     indices = [Index("playlistId"), Index("musicId")]

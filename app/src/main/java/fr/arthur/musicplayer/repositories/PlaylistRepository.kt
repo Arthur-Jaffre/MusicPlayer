@@ -35,4 +35,14 @@ class PlaylistRepository(
         )
 
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistDao.update(
+            PlaylistEntity(
+                id = playlist.id,
+                name = playlist.name!!,
+                numberOfMusics = playlist.numberOfMusics
+            )
+        )
+    }
 }

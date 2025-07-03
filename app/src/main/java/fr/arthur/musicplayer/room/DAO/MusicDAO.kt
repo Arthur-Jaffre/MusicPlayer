@@ -28,6 +28,12 @@ interface MusicDAO {
     suspend fun delete(musics: List<MusicEntity>)
 
     @Transaction
+    @Query(
+        "SELECT music.* FROM music INNER JOIN playlist_music_cross_ref ON music.id = playlist_music_cross_ref.musicId WHERE playlist_music_cross_ref.playlistId = :playlistId"
+    )
+    suspend fun getFromPlaylist(playlistId: String): List<MusicWithArtists>
+
+    @Transaction
     @Query("SELECT * FROM music WHERE isFavorite = 1")
     suspend fun getAllFavoritesMusics(): List<MusicWithArtists>
 

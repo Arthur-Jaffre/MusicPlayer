@@ -5,10 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.Update
 import fr.arthur.musicplayer.room.entities.PlaylistEntity
 import fr.arthur.musicplayer.room.entities.PlaylistMusicCrossRef
-import fr.arthur.musicplayer.room.entities.PlaylistWithMusics
 
 @Dao
 interface PlaylistDAO {
@@ -21,10 +20,9 @@ interface PlaylistDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMusic(crossRef: PlaylistMusicCrossRef)
 
-    @Transaction
-    @Query("SELECT * FROM playlist WHERE name = :playlistName LIMIT 1")
-    suspend fun getMusicsByPlaylistName(playlistName: String): PlaylistWithMusics
-
     @Delete
     suspend fun delete(playlist: PlaylistEntity)
+
+    @Update
+    suspend fun update(playlist: PlaylistEntity)
 }

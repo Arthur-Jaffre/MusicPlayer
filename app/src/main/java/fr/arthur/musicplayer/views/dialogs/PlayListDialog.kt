@@ -47,10 +47,13 @@ class PlayListDialog(
         addButton.setOnClickListener {
             val playlistName = entryText.text.toString()
             if (playlistName.isNotBlank()) {
-                val id = UUID.randomUUID().toString()
-                val playlist = Playlist(id, name = playlistName)
+                val playlist = Playlist(
+                    id = UUID.randomUUID().toString(),
+                    name = playlistName,
+                    numberOfMusics = 1
+                )
                 playlistViewModel.addPlaylist(playlist)
-                playlistViewModel.insertMusic(id, musicId)
+                playlistViewModel.insertMusic(playlist, musicId)
                 dismiss()
             }
         }
@@ -62,8 +65,11 @@ class PlayListDialog(
         adapter = PlayListPopupAdapter(
             onPlaylistChecked = { playlist ->
                 playlistViewModel.insertMusic(
-                    playlist.id,
+                    playlist,
                     musicId
+                )
+                playlistViewModel.updatePlaylist(
+                    playlist.copy(numberOfMusics = playlist.numberOfMusics + 1)
                 )
                 this@PlayListDialog.dismiss()
                 Toast.makeText(

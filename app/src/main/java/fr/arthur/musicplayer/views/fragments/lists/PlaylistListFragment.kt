@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.PlayListAdapter
+import fr.arthur.musicplayer.models.Playlist
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
 import fr.arthur.musicplayer.views.fragments.playlists.FavoritesFragment
+import fr.arthur.musicplayer.views.fragments.playlists.PlaylistsFragment
 import fr.arthur.musicplayer.views.fragments.playlists.RecentlyAddedFragment
 import org.koin.android.ext.android.inject
 
@@ -31,6 +33,7 @@ class PlaylistListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = PlayListAdapter()
+        setupPlaylistAdapterClickListener()
         recyclerView.adapter = adapter
 
         viewModel.playlistObservable.observe {
@@ -42,6 +45,21 @@ class PlaylistListFragment : Fragment() {
 
         return view
     }
+
+    private fun setupPlaylistAdapterClickListener() {
+        adapter.onPlayListClick = { playlist ->
+            // Naviguer vers la page de l'album
+            navigateToPlayListOverview(playlist)
+        }
+    }
+
+    private fun navigateToPlayListOverview(playlist: Playlist) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, PlaylistsFragment.newInstance(playlist))
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     private fun setupPlaylistNames(view: View) {
         val favoriteItem = view.findViewById<View>(R.id.favorite)

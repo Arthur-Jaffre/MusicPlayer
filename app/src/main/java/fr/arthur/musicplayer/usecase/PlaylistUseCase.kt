@@ -7,6 +7,10 @@ class PlaylistUseCase(private val repository: IPlaylistRepository) {
     suspend fun getAllPlayLists(): List<Playlist> = repository.getAllPlayLists()
     suspend fun addPlaylist(playlist: Playlist) = repository.addPlaylist(playlist)
 
-    suspend fun insertMusic(playlistId: String, musicId: String) =
-        repository.insertMusic(playlistId, musicId)
+    suspend fun updatePlaylist(playlist: Playlist) = repository.updatePlaylist(playlist)
+
+    suspend fun insertMusic(playlist: Playlist, musicId: String) {
+        repository.insertMusic(playlist.id, musicId)
+    }
+
 }

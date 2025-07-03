@@ -34,13 +34,13 @@ class FavoritesFragment() : BaseFragment() {
         favoriteViewModel.favoritesObservable.observe { favorites ->
             musicAdapter.submitList(favorites)
 
-            view.findViewById<TextView>(R.id.subtitle).text =
-                getString(R.string.playlist_number_of_musics_count, favorites.size)
-
             view.findViewById<ImageView>(R.id.ic_modify).visibility = View.GONE
 
             if (favorites.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_music_found, Toast.LENGTH_SHORT).show()
+            } else {
+                view.findViewById<TextView>(R.id.subtitle).text =
+                    getString(R.string.playlist_number_of_musics_count, favorites.size)
             }
         }
 

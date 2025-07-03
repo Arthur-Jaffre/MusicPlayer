@@ -8,7 +8,9 @@ import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.PlaylistViewHolder
 import fr.arthur.musicplayer.models.Playlist
 
-class PlayListAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlayListAdapter(
+    var onPlayListClick: ((Playlist) -> Unit)? = null
+) : RecyclerView.Adapter<PlaylistViewHolder>() {
     private val items = mutableListOf<Playlist>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -28,7 +30,11 @@ class PlayListAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(items[position])
+        val playlist = items[position]
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlayListClick?.invoke(playlist)
+        }
     }
 
     override fun getItemCount(): Int = items.size
