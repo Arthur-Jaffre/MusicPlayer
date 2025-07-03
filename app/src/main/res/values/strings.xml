@@ -42,4 +42,11 @@
     <string name="playlist_number_of_musics_count">Nombre de musiques : %d</string>
     <string name="other_default_title">Titre</string>
     <string name="music_missing_data">Les champs \"titre\" et \"artistes\" ne doivent pas être vide.</string>
+    <string name="create_playlist_text">Créer une playlist</string>
+    <string name="added_to_playlist">Ajouté à %1$s</string>
+    <string name="Playlist_edit_menu">Éditer</string>
+    <string name="Playlist_delete_menu">Supprimer</string>
+    <string name="title_rename_playlist">Renommer</string>
+    <string name="edit_rename_playlist">Nouveau nom</string>
+    <string name="validate_btn_rename_playlist">Valider</string>
 </resources>

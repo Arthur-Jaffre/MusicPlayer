@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.viewHolder.PlaylistViewHolder
 import fr.arthur.musicplayer.models.Playlist
+import fr.arthur.musicplayer.models.enums.PlaylistAction
 
-class PlayListAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlayListAdapter(
+    var onPlayListClick: ((Playlist) -> Unit)? = null,
+    var onMenuAction: ((Playlist, PlaylistAction) -> Unit)? = null
+) : RecyclerView.Adapter<PlaylistViewHolder>() {
     private val items = mutableListOf<Playlist>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -24,11 +28,15 @@ class PlayListAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
     ): PlaylistViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_playlist, parent, false)
-        return PlaylistViewHolder(view, parent.context)
+        return PlaylistViewHolder(view, parent.context, onMenuAction)
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(items[position])
+        val playlist = items[position]
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlayListClick?.invoke(playlist)
+        }
     }
 
     override fun getItemCount(): Int = items.size

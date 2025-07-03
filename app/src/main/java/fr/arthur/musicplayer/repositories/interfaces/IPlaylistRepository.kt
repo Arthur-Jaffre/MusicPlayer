@@ -4,4 +4,10 @@ import fr.arthur.musicplayer.models.Playlist
 
 interface IPlaylistRepository {
     suspend fun getAllPlayLists(): List<Playlist>
+    suspend fun addPlaylist(playlist: Playlist)
+    suspend fun insertMusic(playlistId: String, musicId: String)
+    suspend fun updatePlaylist(playlist: Playlist)
+    suspend fun deletePlaylist(playlist: Playlist)
+    suspend fun deletePlaylistMusicCrossRef(playlistId: String)
+
 }

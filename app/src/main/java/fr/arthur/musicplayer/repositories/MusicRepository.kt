@@ -43,6 +43,10 @@ class MusicRepository(
             .sortedBy { it.artistIds.first() }
     }
 
+    override suspend fun getMusicsByPlaylist(playlistId: String): List<Music> {
+        return musicDao.getFromPlaylist(playlistId).map { it.toDomain() }
+    }
+
     @Transaction
     override suspend fun updateMusic(music: Music, albumName: String?) {
         audioMetadataUpdater.updateAudioMetadata(music, albumName)

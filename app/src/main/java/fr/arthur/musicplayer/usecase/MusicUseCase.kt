@@ -3,6 +3,7 @@ package fr.arthur.musicplayer.usecase
 import fr.arthur.musicplayer.models.Album
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.models.Music
+import fr.arthur.musicplayer.models.Playlist
 import fr.arthur.musicplayer.repositories.interfaces.IAlbumRepository
 import fr.arthur.musicplayer.repositories.interfaces.IArtistRepository
 import fr.arthur.musicplayer.repositories.interfaces.IMusicRepository
@@ -17,6 +18,10 @@ class MusicUseCase(
 
     suspend fun loadCachedMusics(): List<Music> {
         return musicRepository.loadCachedMusics()
+    }
+
+    suspend fun getMusicsByPlaylist(playlist: Playlist): List<Music> {
+        return musicRepository.getMusicsByPlaylist(playlist.id)
     }
 
     suspend fun getArtistsById(artistIds: List<String>): List<ArtistEntity> {

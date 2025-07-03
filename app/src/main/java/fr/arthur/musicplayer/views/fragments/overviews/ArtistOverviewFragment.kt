@@ -2,36 +2,35 @@ package fr.arthur.musicplayer.views.fragments.overviews
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.AlbumAdapter
-import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.models.Album
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.viewModel.AlbumListViewModel
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
+import fr.arthur.musicplayer.viewModel.PlayListListViewModel
 import fr.arthur.musicplayer.views.activities.EditArtistActivity
+import fr.arthur.musicplayer.views.fragments.BaseFragment
 import org.koin.android.ext.android.inject
 
-class ArtistOverviewFragment : Fragment() {
+class ArtistOverviewFragment : BaseFragment() {
 
-    private val musicViewModel: MusicListViewModel by inject()
+    override val layoutResId: Int = R.layout.fragment_artist_overview
+    override val musicViewModel: MusicListViewModel by inject()
     private val albumViewModel: AlbumListViewModel by inject()
-    private val artistViewModel: ArtistListViewModel by inject()
+    override val artistViewModel: ArtistListViewModel by inject()
+    override val playlistViewModel: PlayListListViewModel by inject()
 
     private lateinit var artist: Artist
-    private lateinit var musicAdapter: MusicAdapter
     private lateinit var albumAdapter: AlbumAdapter
 
     companion object {
@@ -44,12 +43,8 @@ class ArtistOverviewFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.fragment_artist_overview, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         artist = extractArtistFromArguments()
 
         setupToolbar(view)
@@ -62,8 +57,6 @@ class ArtistOverviewFragment : Fragment() {
 
         loadAlbums()
         loadMusics()
-
-        return view
     }
 
     private fun extractArtistFromArguments(): Artist {
@@ -114,10 +107,6 @@ class ArtistOverviewFragment : Fragment() {
 
     private fun setupMusicRecyclerView(view: View) {
         val musicRecyclerView = view.findViewById<RecyclerView>(R.id.music_recyclerView)
-        musicAdapter = MusicAdapter(
-            toFavorites = { music -> musicViewModel.toFavorites(music) },
-            isFavorite = false,
-        )
         musicRecyclerView.adapter = musicAdapter
         musicRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

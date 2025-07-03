@@ -12,8 +12,36 @@ class PlayListListViewModel(
 
     fun loadPlaylists() {
         scope.launch {
-            val playlist = playlistUseCase.execute()
+            val playlist = playlistUseCase.getAllPlayLists()
             playlistObservable.post(playlist)
         }
+    }
+
+    fun deletePlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCase.deletePlaylist(playlist)
+            loadPlaylists()
+        }
+    }
+
+    fun addPlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCase.addPlaylist(playlist)
+            loadPlaylists()
+        }
+    }
+
+    fun insertMusic(playlist: Playlist, musicId: String) {
+        scope.launch {
+            playlistUseCase.insertMusic(playlist, musicId)
+        }
+    }
+
+    fun updatePlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCase.updatePlaylist(playlist)
+            loadPlaylists()
+        }
+
     }
 }

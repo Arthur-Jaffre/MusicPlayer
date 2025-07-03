@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.PlayListAdapter
+import fr.arthur.musicplayer.models.Playlist
+import fr.arthur.musicplayer.models.enums.PlaylistAction
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import fr.arthur.musicplayer.views.dialogs.PlayListRenameDialog
 import fr.arthur.musicplayer.views.fragments.playlists.FavoritesFragment
+import fr.arthur.musicplayer.views.fragments.playlists.PlaylistsFragment
 import fr.arthur.musicplayer.views.fragments.playlists.RecentlyAddedFragment
 import org.koin.android.ext.android.inject
 
@@ -31,10 +35,11 @@ class PlaylistListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = PlayListAdapter()
+        setupPlaylistAdapterClickListener()
         recyclerView.adapter = adapter
 
         viewModel.playlistObservable.observe {
-            adapter.submitList(it)
+            adapter.submitList(it.toList())
         }
 
         setupPlaylistNames(view)
@@ -42,6 +47,34 @@ class PlaylistListFragment : Fragment() {
 
         return view
     }
+
+    private fun setupPlaylistAdapterClickListener() {
+        adapter.onPlayListClick = { playlist ->
+            // Naviguer vers la page de l'album
+            navigateToPlayListOverview(playlist)
+        }
+        adapter.onMenuAction = { playlist, action ->
+            when (action) {
+                PlaylistAction.EDIT -> {
+                    // ouvrir l'UI d'édition
+                    PlayListRenameDialog(playlist, requireContext(), viewModel).show()
+                }
+
+                PlaylistAction.DELETE -> {
+                    // Suppression playlist
+                    viewModel.deletePlaylist(playlist)
+                }
+            }
+        }
+    }
+
+    private fun navigateToPlayListOverview(playlist: Playlist) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, PlaylistsFragment.newInstance(playlist))
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     private fun setupPlaylistNames(view: View) {
         val favoriteItem = view.findViewById<View>(R.id.favorite)
