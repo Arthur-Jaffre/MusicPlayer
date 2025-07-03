@@ -45,4 +45,18 @@ class PlaylistRepository(
             )
         )
     }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        playlistDao.delete(
+            PlaylistEntity(
+                id = playlist.id,
+                name = playlist.name!!,
+                numberOfMusics = playlist.numberOfMusics
+            )
+        )
+    }
+
+    override suspend fun deletePlaylistMusicCrossRef(playlistId: String) {
+        playlistDao.deletePlaylistMusicCrossRef(playlistId)
+    }
 }

@@ -3,5 +3,5 @@
     <dimen name="default_margin">20dp</dimen>
     <dimen name="bar_size">110dp</dimen>
     <dimen name="min_bar">40dp</dimen>
-    <dimen name="dialog_width">250dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
 </resources>

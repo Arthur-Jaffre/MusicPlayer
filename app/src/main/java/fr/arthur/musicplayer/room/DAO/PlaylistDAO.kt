@@ -25,4 +25,7 @@ interface PlaylistDAO {
 
     @Update
     suspend fun update(playlist: PlaylistEntity)
+    
+    @Query("DELETE FROM playlist_music_cross_ref WHERE playlistId = :playlistId")
+    suspend fun deletePlaylistMusicCrossRef(playlistId: String)
 }

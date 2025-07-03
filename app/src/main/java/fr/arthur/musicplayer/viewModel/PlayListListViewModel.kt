@@ -17,6 +17,13 @@ class PlayListListViewModel(
         }
     }
 
+    fun deletePlaylist(playlist: Playlist) {
+        scope.launch {
+            playlistUseCase.deletePlaylist(playlist)
+            loadPlaylists()
+        }
+    }
+
     fun addPlaylist(playlist: Playlist) {
         scope.launch {
             playlistUseCase.addPlaylist(playlist)
@@ -33,6 +40,7 @@ class PlayListListViewModel(
     fun updatePlaylist(playlist: Playlist) {
         scope.launch {
             playlistUseCase.updatePlaylist(playlist)
+            loadPlaylists()
         }
 
     }

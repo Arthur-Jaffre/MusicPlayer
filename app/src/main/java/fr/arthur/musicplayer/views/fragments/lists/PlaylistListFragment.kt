@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.PlayListAdapter
 import fr.arthur.musicplayer.models.Playlist
+import fr.arthur.musicplayer.models.enums.PlaylistAction
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
+import fr.arthur.musicplayer.views.dialogs.PlayListRenameDialog
 import fr.arthur.musicplayer.views.fragments.playlists.FavoritesFragment
 import fr.arthur.musicplayer.views.fragments.playlists.PlaylistsFragment
 import fr.arthur.musicplayer.views.fragments.playlists.RecentlyAddedFragment
@@ -37,7 +39,7 @@ class PlaylistListFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.playlistObservable.observe {
-            adapter.submitList(it)
+            adapter.submitList(it.toList())
         }
 
         setupPlaylistNames(view)
@@ -50,6 +52,19 @@ class PlaylistListFragment : Fragment() {
         adapter.onPlayListClick = { playlist ->
             // Naviguer vers la page de l'album
             navigateToPlayListOverview(playlist)
+        }
+        adapter.onMenuAction = { playlist, action ->
+            when (action) {
+                PlaylistAction.EDIT -> {
+                    // ouvrir l'UI d'édition
+                    PlayListRenameDialog(playlist, requireContext(), viewModel).show()
+                }
+
+                PlaylistAction.DELETE -> {
+                    // Suppression playlist
+                    viewModel.deletePlaylist(playlist)
+                }
+            }
         }
     }
 
