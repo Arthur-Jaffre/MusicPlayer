@@ -13,6 +13,8 @@ class AlbumUseCase(
     suspend fun getAlbumsByArtist(artistId: String): List<Album> =
         albumRepository.getAlbumsByArtist(artistId)
 
+    suspend fun getAllAlbums(): List<Album> = albumRepository.getAllAlbums()
+
     suspend fun updateAlbum(album: Album, oldArtist: String) {
         // vérifier si l'artiste existe
         if (artistRepository.getArtistById(album.artistId) == null) {

@@ -25,7 +25,7 @@
 
     <!-- Créer le composant pour les boutons de lien -->
     <style name="LinkTextStyle" parent="DefaultTextStyle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
