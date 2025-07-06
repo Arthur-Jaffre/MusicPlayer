@@ -6,4 +6,5 @@ object AppConstants {
     const val DB_NAME = "music-db"
     const val UNKNOWN_ITEM = "Inconnu"
     const val MAX_RECENTLY_ADDED = 25
+    const val CHANNEL_ID = "music_channel"
 }

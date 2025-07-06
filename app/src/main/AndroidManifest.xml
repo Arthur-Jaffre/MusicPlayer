@@ -26,6 +26,9 @@
             android:name=".manager.MusicPlayerService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+        <receiver
+            android:name=".manager.NotificationActionReceiver"
+            android:exported="false" />
 
         <activity
             android:name=".views.activities.MainActivity"
@@ -41,7 +44,9 @@
         <activity android:name=".views.activities.EditArtistActivity" />
         <activity android:name=".views.activities.EditAlbumActivity" />
         <activity android:name=".views.activities.SearchActivity" />
-        <activity android:name=".views.activities.PlayerActivity" />
+        <activity
+            android:name=".views.activities.PlayerActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

@@ -68,7 +68,9 @@ class SearchActivity : AppCompatActivity() {
             onMusicClick = { clickedMusic ->
                 val list = musicAdapter.currentList
                 PlayerManager.playQueue(
-                    list.indexOfFirst { it.title == clickedMusic.title },
+                    list.indexOfFirst {
+                        it.id == clickedMusic.id
+                    },
                     list,
                     this
                 )

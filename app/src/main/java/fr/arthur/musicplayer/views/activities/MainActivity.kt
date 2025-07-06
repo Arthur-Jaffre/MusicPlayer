@@ -18,6 +18,7 @@ import fr.arthur.musicplayer.views.fragments.lists.MusicListFragment
 import fr.arthur.musicplayer.views.fragments.overviews.ArtistOverviewFragment
 import fr.arthur.musicplayer.views.navigation.MainActivityFragmentNavigator
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var folderUriStore: FolderUriStore
@@ -31,24 +32,14 @@ class MainActivity : AppCompatActivity() {
         PlayerManager.init(this)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         initMainActivity()
         initDimensions()
-
-        if (!permissionHandler.hasAudioPermission()) {
-            permissionHandler.requestAudioPermission()
-        } else {
-            handleFolderAccess()
-        }
-
-        if (!permissionHandler.hasNotificationPermission()) {
-            permissionHandler.requestNotificationPermission()
-        }
-
-
         mainActivityFragmentNavigator.setup()
         mainActivityFragmentNavigator.showHomeMusics()
 
-        //DatabaseExporter.exportDatabaseWithWAL(this)
+        // Lancement strict de la chaîne de permissions depuis audio
+        permissionHandler.requestAudioPermission()
     }
 
     private fun initDimensions() {
@@ -79,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         folderUriStore = FolderUriStore(this)
-        permissionHandler = PermissionHandler(this, folderUriStore) { refreshMusics() }
+        permissionHandler = PermissionHandler(this, folderUriStore) { handleFolderAccess() }
         mainActivityFragmentNavigator = MainActivityFragmentNavigator(this)
         miniPlayerController = MiniPlayerController(this, findViewById(R.id.miniPlayerContainer))
     }
@@ -112,5 +103,5 @@ class MainActivity : AppCompatActivity() {
         miniPlayerController.destroy()
         super.onDestroy()
     }
-
 }
+

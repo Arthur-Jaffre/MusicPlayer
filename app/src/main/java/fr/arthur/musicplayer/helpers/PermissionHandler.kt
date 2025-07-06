@@ -15,25 +15,22 @@ class PermissionHandler(
     private val onGranted: () -> Unit
 ) {
 
+    companion object {
+        private const val REQUEST_CODE_AUDIO = 101
+        private const val REQUEST_CODE_NOTIFICATION = 102
+    }
+
     private val folderPickerLauncher: ActivityResultLauncher<Uri?> =
         activity.registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-            uri?.let {
+            if (uri != null) {
                 activity.contentResolver.takePersistableUriPermission(
-                    it,
+                    uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
-                folderUriStore.save(it)
+                folderUriStore.save(uri)
                 onGranted()
             }
         }
-
-    fun hasNotificationPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
-    }
 
     fun hasAudioPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -43,31 +40,69 @@ class PermissionHandler(
         }
     }
 
-
-    fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                activity.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
-            }
+    fun hasNotificationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
         }
     }
 
     fun requestAudioPermission() {
-        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_AUDIO
+        if (!hasAudioPermission()) {
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_AUDIO
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            activity.requestPermissions(arrayOf(permission), REQUEST_CODE_AUDIO)
         } else {
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            // Audio déjà accordée, passer à notification
+            requestNotificationPermission()
         }
-        activity.requestPermissions(arrayOf(permission), 101)
+    }
+
+    fun requestNotificationPermission() {
+        if (!hasNotificationPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                activity.requestPermissions(
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_CODE_NOTIFICATION
+                )
+            } else {
+                // Android < TIRAMISU, pas besoin de permission notification, passer au dossier
+                handleFolderAccess()
+            }
+        } else {
+            // Notification déjà accordée, passer au dossier
+            handleFolderAccess()
+        }
     }
 
     fun handlePermissionResult(requestCode: Int, grantResults: IntArray) {
-        if (requestCode == 101 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (folderUriStore.get() == null) {
-                StorageDialog(activity) { launchFolderPicker() }.show()
-            } else {
-                onGranted()
+        if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            // Permission refusée, ne pas continuer
+            return
+        }
+
+        when (requestCode) {
+            REQUEST_CODE_AUDIO -> {
+                // Audio accordée, demander notification
+                requestNotificationPermission()
             }
+
+            REQUEST_CODE_NOTIFICATION -> {
+                // Notification accordée, gérer accès dossier
+                handleFolderAccess()
+            }
+        }
+    }
+
+    private fun handleFolderAccess() {
+        if (folderUriStore.get() == null) {
+            StorageDialog(activity) { launchFolderPicker() }.show()
+        } else {
+            onGranted()
         }
     }
 

@@ -12,6 +12,12 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="ThickSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:layout_height">10dp</item>
+        <item name="android:progressTint">@color/purple</item>
+        <item name="android:thumbTint">@color/black</item>
+    </style>
+
     <!-- Créer le composant sous titre par défaut -->
     <style name="SubtitleTextStyle" parent="DefaultTextStyle">
         <item name="android:textColor">@color/darkGray</item>

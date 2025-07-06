@@ -51,4 +51,7 @@
     <string name="validate_btn_rename_playlist">Valider</string>
     <string name="search_bar_text">Rechercher</string>
     <string name="position_queue">0/0</string>
+    <string name="music_time">00:00</string>
+    <string name="channel_description">Affiche la musique en cours et les contrôles</string>
+    <string name="channel_name">Contrôle de lecture</string>
 </resources>

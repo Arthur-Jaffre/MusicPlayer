@@ -1,5 +1,6 @@
 package fr.arthur.musicplayer.views.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,6 +24,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var albumView: TextView
     private lateinit var positionView: TextView
     private lateinit var seekBar: SeekBar
+    private lateinit var seekBarLeftText: TextView
+    private lateinit var seekBarRightText: TextView
     private lateinit var btnPlayPause: ImageButton
     private lateinit var btnPrevious: ImageButton
     private lateinit var btnNext: ImageButton
@@ -61,6 +64,8 @@ class PlayerActivity : AppCompatActivity() {
         albumView = findViewById(R.id.musicAlbum)
         positionView = findViewById(R.id.positionInQueue)
         seekBar = findViewById(R.id.seekBar)
+        seekBarLeftText = findViewById(R.id.seekBarLeftText)
+        seekBarRightText = findViewById(R.id.seekBarRightText)
         btnPlayPause = findViewById(R.id.btnPlayPause)
         btnPrevious = findViewById(R.id.btnPrevious)
         btnNext = findViewById(R.id.btnNext)
@@ -118,12 +123,24 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.ic_waveform)
             .into(imageCover)
 
-        val icon = if (state.isPlaying) {
-            android.R.drawable.ic_media_pause
-        } else {
-            android.R.drawable.ic_media_play
-        }
-        btnPlayPause.setImageResource(icon)
+        btnPlayPause.setImageResource(
+            if (state.isPlaying) {
+                android.R.drawable.ic_media_pause
+            } else {
+                android.R.drawable.ic_media_play
+            }
+        )
+
+        btnFavorite.setImageResource(
+            if (music.isFavorite) {
+                R.drawable.ic_heart
+            } else {
+                R.drawable.ic_unheart
+            }
+        )
+
+        updateShuffleIcon()
+        updateRepeatIcon()
     }
 
     private fun startSeekBarUpdater() {
@@ -134,18 +151,49 @@ class PlayerActivity : AppCompatActivity() {
                     val dur = PlayerManager.getDuration()
                     seekBar.max = dur.toInt()
                     seekBar.progress = pos.toInt()
+
+                    seekBarLeftText.text = formatMillisToTime(pos)
+                    seekBarRightText.text = formatMillisToTime(dur)
                 }
                 handler.postDelayed(this, 1000)
             }
         })
     }
 
+    @SuppressLint("DefaultLocale")
+    private fun formatMillisToTime(millis: Long): String {
+        val totalSeconds = millis / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun updateShuffleIcon() {
+        val iconRes = if (PlayerManager.isShuffleMode()) {
+            R.drawable.ic_shuffle
+        } else {
+            R.drawable.ic_unshuffle
+        }
+        btnShuffle.setImageResource(iconRes)
+    }
+
+    private fun updateRepeatIcon() {
+        val iconRes = if (PlayerManager.isRepeatMode()) {
+            R.drawable.ic_repeat
+        } else {
+            R.drawable.ic_unrepeat
+        }
+        btnRepeat.setImageResource(iconRes)
+    }
+
     private fun onShuffleClicked() {
-        // TODO: implémenter le mode shuffle
+        PlayerManager.toggleShuffle()
+        updateShuffleIcon()
     }
 
     private fun onRepeatClicked() {
-        // TODO: implémenter le mode repeat
+        PlayerManager.toggleRepeat()
+        updateRepeatIcon()
     }
 
     private fun onFavoriteClicked() {

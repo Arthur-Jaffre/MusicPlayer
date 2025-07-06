@@ -12,14 +12,18 @@ object PlayerManager {
 
     private var queue: List<Music> = emptyList()
     private var currentIndex: Int = -1
-
+    private var isShuffle = false
+    private var isRepeat = false
+    private var originalQueue: List<Music> = emptyList()
     private var exoPlayer: ExoPlayer? = null
 
     private val observers = mutableListOf<(PlayerState) -> Unit>()
 
     fun init(context: Context) {
         if (exoPlayer == null) {
-            exoPlayer = ExoPlayer.Builder(context).build()
+            exoPlayer = ExoPlayer.Builder(context).build().apply {
+                addListener(playerListener)
+            }
             exoPlayer?.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(state: Int) {
                     notifyObservers()
@@ -33,24 +37,37 @@ object PlayerManager {
         }
     }
 
-    fun ensureServiceRunning(context: Context) {
-        context.startForegroundService(Intent(context, MusicPlayerService::class.java))
+    private fun handleAutoNext() {
+        val size = getQueueSize()
+        if (size == 0) return
+
+        val isLast = currentIndex == size - 1
+        val nextIndex = if (isLast) 0 else currentIndex + 1
+        currentIndex = nextIndex
+        exoPlayer?.seekTo(nextIndex, 0L)
+        exoPlayer?.playWhenReady = true
+        notifyObservers()
     }
 
+    fun ensureServiceRunning(context: Context) {
+        context.applicationContext.startForegroundService(
+            Intent(
+                context.applicationContext,
+                MusicPlayerService::class.java
+            )
+        )
+    }
+
+
     fun playQueue(startIndex: Int, newQueue: List<Music>, context: Context) {
-        queue = newQueue
+        originalQueue = newQueue
+        queue = if (isShuffle) newQueue.shuffled() else newQueue
         currentIndex = startIndex
 
-        val mediaItems = queue.map { music ->
-            MediaItem.Builder()
-                .setUri(music.id)
-                .setMediaId(music.id)
-                .setTag(music)
-                .build()
-        }
+        val mediaItems = queue.map { toMediaItem(it) }
 
         ensureServiceRunning(context)
-        exoPlayer?.setMediaItems(mediaItems, startIndex, 0L)
+        exoPlayer?.setMediaItems(mediaItems, currentIndex, 0L)
         exoPlayer?.prepare()
         exoPlayer?.play()
         notifyObservers()
@@ -73,6 +90,14 @@ object PlayerManager {
         currentIndex = nextIndex
         exoPlayer?.seekTo(nextIndex, 0L)
         notifyObservers()
+    }
+
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(state: Int) {
+            if (state == Player.STATE_ENDED) {
+                handleAutoNext()
+            }
+        }
     }
 
     fun previous() {
@@ -120,6 +145,42 @@ object PlayerManager {
         observers.forEach { it(state) }
     }
 
+    fun toggleShuffle() {
+        isShuffle = !isShuffle
+        updateQueue()
+        notifyObservers()
+    }
+
+    fun toggleRepeat() {
+        isRepeat = !isRepeat
+        exoPlayer?.repeatMode = if (isRepeat) Player.REPEAT_MODE_ONE else Player.REPEAT_MODE_OFF
+        notifyObservers()
+    }
+
+    private fun toMediaItem(music: Music): MediaItem {
+        return MediaItem.Builder()
+            .setUri(music.id)
+            .setMediaId(music.id)
+            .setTag(music)
+            .build()
+    }
+
+    private fun updateQueue() {
+        val currentMusic = currentMusic() ?: return
+        queue = if (isShuffle) {
+            originalQueue.shuffled()
+        } else {
+            originalQueue
+        }
+
+        // Recalculer l'index
+        currentIndex = queue.indexOfFirst { it.id == currentMusic.id }
+
+        exoPlayer?.setMediaItems(queue.map { toMediaItem(it) }, currentIndex, getCurrentPosition())
+        exoPlayer?.prepare()
+        exoPlayer?.playWhenReady = isPlaying()
+    }
+
     fun getCurrentIndex(): Int {
         return currentIndex
     }
@@ -128,7 +189,10 @@ object PlayerManager {
         return queue.size
     }
 
-    private fun buildState(): PlayerState {
+    fun isShuffleMode(): Boolean = isShuffle
+    fun isRepeatMode(): Boolean = isRepeat
+
+    fun buildState(): PlayerState {
         return PlayerState(
             music = currentMusic(),
             isPlaying = isPlaying(),
