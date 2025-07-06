@@ -57,6 +57,6 @@ class FavoritesFragment() : BaseFragment() {
 
     private fun setupFragment(view: View) {
         view.findViewById<TextView>(R.id.title).text = getString(R.string.favoris_playlist)
-        view.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_favorite)
+        view.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_heart)
     }
 }

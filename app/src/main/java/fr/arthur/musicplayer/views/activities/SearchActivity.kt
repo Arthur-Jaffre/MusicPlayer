@@ -14,6 +14,7 @@ import fr.arthur.musicplayer.adapters.ArtistAdapter
 import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.helpers.AppConstants
 import fr.arthur.musicplayer.helpers.MusicAdapterHandler
+import fr.arthur.musicplayer.manager.PlayerManager
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
@@ -60,13 +61,30 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        musicAdapter = MusicAdapter { context, music ->
-            MusicAdapterHandler(
-                playlistViewModel = playlistViewModel,
-                toFavorites = { musicViewModel.toFavorites(it) },
-                onArtistClick = { artistId -> artistViewModel.getArtistById(artistId) }
-            ).showOptions(context, music)
-        }
+        val handler = MusicAdapterHandler(
+            playlistViewModel = playlistViewModel,
+            toFavorites = { musicViewModel.toFavorites(it) },
+            onArtistClick = { artistId -> artistViewModel.getArtistById(artistId) },
+            onMusicClick = { clickedMusic ->
+                val list = musicAdapter.currentList
+                PlayerManager.playQueue(
+                    list.indexOfFirst { it.title == clickedMusic.title },
+                    list,
+                    this
+                )
+            }
+        )
+
+        musicAdapter = MusicAdapter(
+            onShowOptions = { context, music ->
+                handler.showOptions(context, music)
+            },
+            onMusicClick = { music ->
+                handler.onMusicClicked(music)
+            }
+        )
+
+
 
         inputSearchBar = findViewById(R.id.search_bar)
 

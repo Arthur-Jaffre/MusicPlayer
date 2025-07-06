@@ -4,7 +4,8 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="false">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/main_toolbar"
@@ -100,8 +101,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/bar_size"
-        android:layout_marginBottom="@dimen/min_bar"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    <include
+        android:id="@+id/miniPlayerContainer"
+        layout="@layout/mini_player"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

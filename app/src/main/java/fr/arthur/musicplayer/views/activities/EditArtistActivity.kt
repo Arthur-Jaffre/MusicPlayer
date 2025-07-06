@@ -6,6 +6,7 @@ import android.widget.Toast
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.models.Artist
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
+import fr.arthur.musicplayer.views.activities.utils.BaseEditWithImageActivity
 import org.koin.android.ext.android.inject
 
 class EditArtistActivity : BaseEditWithImageActivity<Artist>() {

@@ -50,4 +50,5 @@
     <string name="edit_rename_playlist">Nouveau nom</string>
     <string name="validate_btn_rename_playlist">Valider</string>
     <string name="search_bar_text">Rechercher</string>
+    <string name="position_queue">0/0</string>
 </resources>

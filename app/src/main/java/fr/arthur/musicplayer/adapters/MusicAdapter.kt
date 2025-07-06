@@ -11,7 +11,8 @@ import fr.arthur.musicplayer.adapters.viewHolder.MusicViewHolder
 import fr.arthur.musicplayer.models.Music
 
 class MusicAdapter(
-    private val onShowOptions: (Context, Music) -> Unit
+    private val onShowOptions: (Context, Music) -> Unit,
+    private val onMusicClick: (Music) -> Unit
 ) : ListAdapter<Music, MusicViewHolder>(MusicDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -22,8 +23,13 @@ class MusicAdapter(
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         val music = getItem(position)
         holder.bind(music)
+        
         holder.itemView.findViewById<ImageView>(R.id.icon_more).setOnClickListener {
             onShowOptions(it.context, music)
+        }
+
+        holder.itemView.setOnClickListener {
+            onMusicClick(music)
         }
     }
 

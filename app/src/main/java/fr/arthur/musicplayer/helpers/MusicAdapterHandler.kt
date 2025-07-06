@@ -16,8 +16,13 @@ import fr.arthur.musicplayer.views.dialogs.PlayListDialog
 class MusicAdapterHandler(
     private val playlistViewModel: PlayListListViewModel,
     private val toFavorites: (Music) -> Unit,
-    private val onArtistClick: ((String) -> Unit)?
+    private val onArtistClick: ((String) -> Unit)?,
+    private val onMusicClick: (Music) -> Unit
 ) {
+
+    fun onMusicClicked(music: Music) {
+        onMusicClick(music)
+    }
 
     fun showOptions(context: Context, music: Music) {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_music_options, null)

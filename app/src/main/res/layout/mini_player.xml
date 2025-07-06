@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/miniPlayer"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/purple"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/miniPlayerImage"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/miniPlayerTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/other_default_title"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <ImageButton
+        android:id="@+id/miniPlayerPrev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple"
+        android:src="@android:drawable/ic_media_previous"
+        app:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/miniPlayerPlayPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple"
+        android:src="@android:drawable/ic_media_play"
+        app:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/miniPlayerNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple"
+        android:paddingEnd="8dp"
+        android:src="@android:drawable/ic_media_next"
+        app:tint="@color/white" />
+
+</LinearLayout>

@@ -1,4 +1,4 @@
-package fr.arthur.musicplayer.views.activities
+package fr.arthur.musicplayer.views.activities.utils
 
 import android.Manifest
 import android.content.Intent
