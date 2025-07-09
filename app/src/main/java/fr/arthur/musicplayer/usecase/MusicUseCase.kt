@@ -51,7 +51,7 @@ class MusicUseCase(
         val existingArtists =
             getArtistsById(music.artistIds) // récupère les artistes existants liés à la musique
         val missingIds =
-            music.artistIds.filter { it !in existingArtists.map { it.id } } // identifie les IDs absents (non dans la base)
+            music.artistIds.filter { it -> it !in existingArtists.map { it.id } } // identifie les IDs absents (non dans la base)
         val createdArtists = insertArtist(
             missingIds.map { id ->
                 ArtistEntity(

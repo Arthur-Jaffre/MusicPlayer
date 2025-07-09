@@ -90,8 +90,9 @@ class AlbumOverviewFragment : BaseFragment() {
 
         view.findViewById<ImageView>(R.id.ic_modify).setOnClickListener {
             // ouvrir la page de modification artiste
-            val intent = Intent(requireContext(), EditAlbumActivity::class.java)
-            intent.putExtra("album", album)
+            val intent = Intent(requireContext(), EditAlbumActivity::class.java).apply {
+                putExtra("album", album)
+            }
             requireContext().startActivity(intent)
         }
     }

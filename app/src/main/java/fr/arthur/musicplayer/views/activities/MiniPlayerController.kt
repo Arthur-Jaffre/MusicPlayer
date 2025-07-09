@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.manager.PlayerManager
+import fr.arthur.musicplayer.models.Music
 import fr.arthur.musicplayer.models.PlayerState
 
 class MiniPlayerController(
@@ -23,6 +24,8 @@ class MiniPlayerController(
     private val nextButton: ImageButton = rootView.findViewById(R.id.miniPlayerNext)
     private val prevButton: ImageButton = rootView.findViewById(R.id.miniPlayerPrev)
 
+    private var currentMusic: Music? = null
+
     private val observer: (PlayerState) -> Unit = { state -> updateUI(state) }
 
     init {
@@ -32,7 +35,11 @@ class MiniPlayerController(
 
     private fun setupListeners() {
         miniPlayer.setOnClickListener {
-            context.startActivity(Intent(context, PlayerActivity::class.java))
+            currentMusic?.let { music ->
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("music", music)
+                context.startActivity(intent)
+            }
         }
 
         playPauseButton.setOnClickListener {
@@ -49,14 +56,17 @@ class MiniPlayerController(
     }
 
     private fun updateUI(state: PlayerState) {
-        if (state.music == null) {
+        val music = state.music
+        if (music == null) {
             miniPlayer.visibility = View.GONE
+            currentMusic = null
         } else {
+            currentMusic = music
             miniPlayer.visibility = View.VISIBLE
-            titleView.text = state.music.title
+            titleView.text = music.title
 
             Glide.with(context)
-                .load(state.music.imageUri)
+                .load(music.imageUri)
                 .placeholder(R.drawable.ic_waveform)
                 .into(imageView)
 

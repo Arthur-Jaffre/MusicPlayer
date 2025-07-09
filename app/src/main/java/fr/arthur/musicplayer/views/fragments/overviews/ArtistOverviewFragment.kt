@@ -75,8 +75,9 @@ class ArtistOverviewFragment : BaseFragment() {
 
         view.findViewById<ImageView>(R.id.ic_modify).setOnClickListener {
             // ouvrir la page de modification artiste
-            val intent = Intent(requireContext(), EditArtistActivity::class.java)
-            intent.putExtra("artist", artist)
+            val intent = Intent(requireContext(), EditArtistActivity::class.java).apply {
+                putExtra("artist", artist)
+            }
             requireContext().startActivity(intent)
         }
     }

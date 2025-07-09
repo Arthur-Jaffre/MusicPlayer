@@ -5,33 +5,29 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.arthur.musicplayer.R
 import fr.arthur.musicplayer.adapters.ArtistAdapter
-import fr.arthur.musicplayer.adapters.MusicAdapter
 import fr.arthur.musicplayer.helpers.AppConstants
-import fr.arthur.musicplayer.helpers.MusicAdapterHandler
-import fr.arthur.musicplayer.manager.PlayerManager
 import fr.arthur.musicplayer.viewModel.ArtistListViewModel
 import fr.arthur.musicplayer.viewModel.MusicListViewModel
 import fr.arthur.musicplayer.viewModel.PlayListListViewModel
 import fr.arthur.musicplayer.viewModel.SearchViewModel
+import fr.arthur.musicplayer.views.activities.utils.BaseMusicActivity
 import org.koin.android.ext.android.inject
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseMusicActivity() {
     private lateinit var inputSearchBar: EditText
+    override val musicViewModel: MusicListViewModel by inject()
+    override val artistViewModel: ArtistListViewModel by inject()
+    override val playlistViewModel: PlayListListViewModel by inject()
     private lateinit var artistRecyclerView: RecyclerView
     private lateinit var musicRecyclerView: RecyclerView
     private lateinit var keyboard: InputMethodManager
     private val searchViewModel: SearchViewModel by inject()
-    private val playlistViewModel: PlayListListViewModel by inject()
-    private val musicViewModel: MusicListViewModel by inject()
-    private val artistViewModel: ArtistListViewModel by inject()
     private lateinit var artistAdapter: ArtistAdapter
-    private lateinit var musicAdapter: MusicAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,39 +50,12 @@ class SearchActivity : AppCompatActivity() {
         artistAdapter = ArtistAdapter()
         artistAdapter.onArtistClick = { artist ->
             // Naviguer vers la page de l'artiste
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("artist", artist)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("artist", artist)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
             startActivity(intent)
-            finish()
         }
-
-        val handler = MusicAdapterHandler(
-            playlistViewModel = playlistViewModel,
-            toFavorites = { musicViewModel.toFavorites(it) },
-            onArtistClick = { artistId -> artistViewModel.getArtistById(artistId) },
-            onMusicClick = { clickedMusic ->
-                val list = musicAdapter.currentList
-                PlayerManager.playQueue(
-                    list.indexOfFirst {
-                        it.id == clickedMusic.id
-                    },
-                    list,
-                    this
-                )
-            }
-        )
-
-        musicAdapter = MusicAdapter(
-            onShowOptions = { context, music ->
-                handler.showOptions(context, music)
-            },
-            onMusicClick = { music ->
-                handler.onMusicClicked(music)
-            }
-        )
-
-
 
         inputSearchBar = findViewById(R.id.search_bar)
 

@@ -23,9 +23,13 @@ class MusicAdapter(
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         val music = getItem(position)
         holder.bind(music)
-        
+
         holder.itemView.findViewById<ImageView>(R.id.icon_more).setOnClickListener {
             onShowOptions(it.context, music)
+        }
+
+        holder.itemView.findViewById<ImageView>(R.id.icon_play).setOnClickListener {
+            onMusicClick(music)
         }
 
         holder.itemView.setOnClickListener {

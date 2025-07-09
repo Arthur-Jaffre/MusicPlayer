@@ -30,7 +30,7 @@ class MusicListViewModel(
     }
 
 
-    fun toFavorites(music: Music) {
+    fun updateFavorites(music: Music) {
         scope.launch {
             musicUseCase.updateFavorites(music)
         }

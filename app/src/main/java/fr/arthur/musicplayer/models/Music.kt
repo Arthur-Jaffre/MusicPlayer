@@ -11,7 +11,7 @@ data class Music(
     val year: Int? = null,
     val trackNumber: Int? = null,
     val imageUri: String? = null,
-    val isFavorite: Boolean = false,
+    var isFavorite: Boolean = false,
     val addedAt: Long = System.currentTimeMillis()
 ) : Serializable {
     fun artistIdsAsString(separator: String = ", "): String {

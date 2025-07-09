@@ -61,8 +61,8 @@ class EditMusicActivity : BaseEditWithImageActivity<Music>() {
             val artists = artistEdit.text.split(",").map { it.trim() }.filter { it.isNotBlank() }
             if (titleEdit.text.isNotEmpty() && artists.isNotEmpty()) {
                 val updatedMusic = currentMusic.copy(
-                    title = titleEdit.text.toString().takeIf { it.isNotBlank() },
-                    albumId = albumEdit.text.toString(),
+                    title = titleEdit.text.toString().trim().takeIf { it.isNotBlank() },
+                    albumId = albumEdit.text.toString().trim(),
                     artistIds = artists,
                     year = yearEdit.text.toString().toIntOrNull(),
                     trackNumber = trackEdit.text.toString().toIntOrNull(),

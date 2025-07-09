@@ -37,7 +37,7 @@ class EditArtistActivity : BaseEditWithImageActivity<Artist>() {
         findViewById<Button>(R.id.btn_save).setOnClickListener {
             if (artistEdit.text.toString().isNotEmpty()) {
                 val updatedArtist = currentArtist.copy(
-                    id = artistEdit.text.toString(),
+                    id = artistEdit.text.toString().trim(),
                     imageUri = selectedImageUri?.toString() ?: currentArtist.imageUri
                 )
                 musicViewModel.updateArtist(updatedArtist, lastNameArtist)

@@ -54,10 +54,14 @@ class MusicNotificationManager(private val context: Context) {
             PendingIntent.FLAG_IMMUTABLE
         )
 
+
+        val intent = Intent(context, PlayerActivity::class.java)
+        intent.putExtra("music", music)
+
         val contentIntent = PendingIntent.getActivity(
             context,
             0,
-            Intent(context, PlayerActivity::class.java),
+            intent,
             PendingIntent.FLAG_IMMUTABLE
         )
 

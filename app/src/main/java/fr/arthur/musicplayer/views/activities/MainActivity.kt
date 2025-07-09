@@ -53,15 +53,26 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        intent.getSerializableExtra("artist")?.let { artist ->
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val artist = intent.getSerializableExtra("artist") as? Artist ?: return
+
+        // Nettoyer les fragments existants
+        supportFragmentManager.fragments.forEach { fragment ->
             supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    ArtistOverviewFragment.newInstance(artist as Artist)
-                )
-                .addToBackStack(null)
-                .commit()
+                .remove(fragment)
+                .commitNowAllowingStateLoss()
         }
+
+        // Remplacer par le nouveau fragment
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragment_container,
+                ArtistOverviewFragment.newInstance(artist)
+            )
+            .commit()
     }
 
     private fun initMainActivity() {

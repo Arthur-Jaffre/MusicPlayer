@@ -42,8 +42,8 @@ class EditAlbumActivity : BaseEditWithImageActivity<Album>() {
         findViewById<Button>(R.id.btn_save).setOnClickListener {
             if (albumEdit.text.toString().isNotEmpty() && artistEdit.text.toString().isNotEmpty()) {
                 val updatedAlbum = currentAlbum.copy(
-                    name = albumEdit.text.toString(),
-                    artistId = artistEdit.text.toString(),
+                    name = albumEdit.text.toString().trim(),
+                    artistId = artistEdit.text.toString().trim(),
                     imageUri = selectedImageUri?.toString() ?: currentAlbum.imageUri
                 )
                 albumViewModel.updateAlbum(updatedAlbum, oldArtist)
